@@ -10,6 +10,12 @@ const COURSES = [
   { id: 'GEBS-101', name: 'GEBS-101', credits: 2 },
 ];
 
+// NEW: Added a mapping for grades to their minimum percentage thresholds
+const GRADE_THRESHOLDS = {
+  'A+': 0.80, 'A': 0.75, 'A-': 0.70, 'B+': 0.65,
+  'B': 0.60, 'B-': 0.55, 'C+': 0.50, 'C': 0.45, 'D': 0.40,
+};
+
 const INITIAL_INPUTS = {
   ct1: '', ct2: '', ct3: '',
   mid: '', attendance: '', performance: ''
@@ -51,37 +57,37 @@ const NumberInput = ({ name, label, value, onChange, min, max, error, helperText
 export default function App() {
   const [isDarkMode, setIsDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
-      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      return window.matchMedia && window.matchMedia('(pre-color-scheme: dark)').matches;
     }
     return false;
   });
   const [selectedCourseId, setSelectedCourseId] = useState(COURSES[0].id);
+  const [targetGrade, setTargetGrade] = useState('A+'); // NEW: State for the target grade
   const [inputs, setInputs] = useState(INITIAL_INPUTS);
   const [errors, setErrors] = useState({});
   const [isInfoVisible, setIsInfoVisible] = useState(false);
 
   const selectedCourse = useMemo(() => COURSES.find(c => c.id === selectedCourseId), [selectedCourseId]);
   
-  // --- UPDATED LOGIC ---
   const courseConfig = useMemo(() => {
     const credits = selectedCourse.credits;
     const isThreeCredit = credits === 3;
-    const isGebs101 = selectedCourse.id === 'GEBS-101'; // NEW: Check for the specific course
+    const isGebs101 = selectedCourse.id === 'GEBS-101';
+    
+    // CHANGED: Target is now dynamic based on selected grade
+    const totalMarks = isThreeCredit ? 300 : 200;
+    const target = totalMarks * GRADE_THRESHOLDS[targetGrade];
 
-    // Define base values
-    let target = isThreeCredit ? 240 : 160;
     let midTermMax = isThreeCredit ? 30 : 20;
     let attendanceMax = 15;
     let performanceMax = 15;
     let finalMax;
     let applyCtMultiplier = true;
 
-    // CHANGED: Apply special logic for GEBS-101
     if (isGebs101) {
         attendanceMax = 10;
         performanceMax = 10;
         applyCtMultiplier = false;
-        // Recalculate Final Max for GEBS-101: 200 - (CT 40 + Mid 20 + Att 10 + Perf 10)
         finalMax = 200 - (40 + 20 + 10 + 10); // 120
     } else {
         finalMax = isThreeCredit 
@@ -94,11 +100,11 @@ export default function App() {
       target,
       finalMax,
       midTermMax,
-      attendanceMax, // NEW
-      performanceMax, // NEW
-      applyCtMultiplier // NEW
+      attendanceMax,
+      performanceMax,
+      applyCtMultiplier
     };
-  }, [selectedCourse]);
+  }, [selectedCourse, targetGrade]); // CHANGED: Added targetGrade dependency
 
   const calculationResult = useMemo(() => {
     let hasErrors = Object.values(errors).some(e => e);
@@ -118,21 +124,21 @@ export default function App() {
     }
 
     const bestTwoSum = getBestTwoCtSum(ct1, ct2, ct3);
-    // CHANGED: Conditionally apply the CT multiplier based on the course
     const ctContribution = courseConfig.applyCtMultiplier ? bestTwoSum * 1.5 : bestTwoSum;
     const achieved = ctContribution + mid + attendance + performance;
     const required = courseConfig.target - achieved;
 
-    let status = 'Needs Final';
+    let status = `Aiming for ${targetGrade}`;
     let message = `You need ${Math.ceil(Math.max(0, required))} marks in the Final.`;
 
+    // CHANGED: Messages now reference the target grade
     if (required <= 0) {
       status = 'Achieved';
-      message = 'You’ve already reached the CG-4 target.';
+      message = `You've already secured the target for a(n) "${targetGrade}" grade.`;
     } else if (required > courseConfig.finalMax) {
       status = 'Not Possible';
       const shortfall = Math.ceil(required - courseConfig.finalMax);
-      message = `Not possible to reach CG-4. You would be short by ${shortfall} marks even with a perfect final.`;
+      message = `Cannot achieve "${targetGrade}". You'd be short by ${shortfall} marks.`;
     }
 
     return {
@@ -142,7 +148,7 @@ export default function App() {
       status,
       message,
     };
-  }, [inputs, errors, courseConfig]);
+  }, [inputs, errors, courseConfig, targetGrade]); // CHANGED: Added targetGrade dependency
 
   useEffect(() => {
     if (isDarkMode) {
@@ -168,7 +174,6 @@ export default function App() {
     if (value !== '' && isNaN(numValue)) {
       errorMsg = 'Must be a number.';
     } else if (!isNaN(numValue)) {
-      // CHANGED: Use dynamic max values from courseConfig for validation
       let min = 0, max = 0;
       if (name.startsWith('ct')) { max = 20; }
       else if (name === 'mid') { max = courseConfig.midTermMax; }
@@ -198,9 +203,23 @@ export default function App() {
             CSE-25 Grade Calculator
           </h1>
           <div className="flex items-center gap-3">
+            {/* NEW: Target Grade Selector */}
+            <select
+              value={targetGrade}
+              onChange={(e) => setTargetGrade(e.target.value)}
+              aria-label="Target Grade"
+              className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              {Object.keys(GRADE_THRESHOLDS).map(grade => (
+                <option key={grade} value={grade}>
+                  Target: {grade}
+                </option>
+              ))}
+            </select>
             <select
               value={selectedCourseId}
               onChange={(e) => setSelectedCourseId(e.target.value)}
+              aria-label="Course"
               className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
               {COURSES.map(course => (
@@ -229,10 +248,8 @@ export default function App() {
                 </div>
                 <hr className="sm:col-span-2 my-2 border-gray-200 dark:border-gray-600"/>
                 <NumberInput name="mid" label="Mid Term" value={inputs.mid} onChange={handleInputChange} min={0} max={courseConfig.midTermMax} error={errors.mid}/>
-                {/* CHANGED: Use dynamic max from courseConfig */}
                 <NumberInput name="attendance" label="Attendance" value={inputs.attendance} onChange={handleInputChange} min={0} max={courseConfig.attendanceMax} error={errors.attendance}/>
                 <div className="sm:col-span-2">
-                    {/* CHANGED: Use dynamic max from courseConfig */}
                     <NumberInput name="performance" label="Class Performance" value={inputs.performance} onChange={handleInputChange} min={0} max={courseConfig.performanceMax} error={errors.performance}/>
                 </div>
             </div>
@@ -289,12 +306,10 @@ export default function App() {
                 <h3 className="text-xl font-bold mb-4">Calculation Formula</h3>
                 <div className="space-y-3 text-sm text-gray-600 dark:text-gray-300">
                     <p>1. <strong>Best CT Total:</strong> The sum of the two highest Class Test scores.</p>
-                    <p>2. <strong>CT Contribution:</strong> `Best CT Total` (For GEBS-101) or `Best CT Total × 1.5` (for all other courses).</p>
+                    <p>2. <strong>CT Contribution:</strong> `Best CT Total` (For GEBS-101) or `Best CT Total × 1.5` (for others).</p>
                     <p>3. <strong>Achieved Marks:</strong> `CT Contribution + Mid Term + Attendance + Class Performance`.</p>
-                    <p>4. <strong>Required for CG-4:</strong> `Target Marks - Achieved Marks`.</p>
-                    <p className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-600">
-                        The target is <strong>{courseConfig.target}</strong> for this {courseConfig.credits}-credit course. The final exam has a maximum of <strong>{courseConfig.finalMax}</strong> marks.
-                    </p>
+                    <p>4. <strong>Target Marks:</strong> `Total Marks × Grade Percentage` (e.g., for 'A', it's 75%).</p>
+                    <p>5. <strong>Required for Final:</strong> `Target Marks - Achieved Marks`.</p>
                 </div>
                  <button onClick={() => setIsInfoVisible(false)} className="mt-6 w-full py-2 px-4 rounded-md text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
                     Got it
