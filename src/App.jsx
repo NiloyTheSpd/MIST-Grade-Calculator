@@ -10,10 +10,18 @@ const COURSES = [
   { id: 'GEBS-101', name: 'GEBS-101', credits: 2 },
 ];
 
-// NEW: Added a mapping for grades to their minimum percentage thresholds
+// CHANGED: Expanded GRADE_THRESHOLDS to include gradePoints
 const GRADE_THRESHOLDS = {
-  'A+': 0.80, 'A': 0.75, 'A-': 0.70, 'B+': 0.65,
-  'B': 0.60, 'B-': 0.55, 'C+': 0.50, 'C': 0.45, 'D': 0.40,
+  'A+': { percentage: 0.80, gradePoints: 4.00 },
+  'A': { percentage: 0.75, gradePoints: 3.75 },
+  'A-': { percentage: 0.70, gradePoints: 3.50 },
+  'B+': { percentage: 0.65, gradePoints: 3.25 },
+  'B': { percentage: 0.60, gradePoints: 3.00 },
+  'B-': { percentage: 0.55, gradePoints: 2.75 },
+  'C+': { percentage: 0.50, gradePoints: 2.50 },
+  'C': { percentage: 0.45, gradePoints: 2.25 },
+  'D': { percentage: 0.40, gradePoints: 2.00 },
+  'F*': { percentage: 0.00, gradePoints: 0.00 } // Added F* as a selectable target, even if unlikely
 };
 
 const INITIAL_INPUTS = {
@@ -57,12 +65,12 @@ const NumberInput = ({ name, label, value, onChange, min, max, error, helperText
 export default function App() {
   const [isDarkMode, setIsDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
-      return window.matchMedia && window.matchMedia('(pre-color-scheme: dark)').matches;
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     }
     return false;
   });
   const [selectedCourseId, setSelectedCourseId] = useState(COURSES[0].id);
-  const [targetGrade, setTargetGrade] = useState('A+'); // NEW: State for the target grade
+  const [targetGrade, setTargetGrade] = useState('A+');
   const [inputs, setInputs] = useState(INITIAL_INPUTS);
   const [errors, setErrors] = useState({});
   const [isInfoVisible, setIsInfoVisible] = useState(false);
@@ -74,9 +82,9 @@ export default function App() {
     const isThreeCredit = credits === 3;
     const isGebs101 = selectedCourse.id === 'GEBS-101';
     
-    // CHANGED: Target is now dynamic based on selected grade
+    // CHANGED: Access percentage from the GRADE_THRESHOLDS object
     const totalMarks = isThreeCredit ? 300 : 200;
-    const target = totalMarks * GRADE_THRESHOLDS[targetGrade];
+    const target = totalMarks * GRADE_THRESHOLDS[targetGrade].percentage;
 
     let midTermMax = isThreeCredit ? 30 : 20;
     let attendanceMax = 15;
@@ -97,6 +105,7 @@ export default function App() {
       
     return {
       credits,
+      totalMarks, // NEW: added for info display
       target,
       finalMax,
       midTermMax,
@@ -104,7 +113,7 @@ export default function App() {
       performanceMax,
       applyCtMultiplier
     };
-  }, [selectedCourse, targetGrade]); // CHANGED: Added targetGrade dependency
+  }, [selectedCourse, targetGrade]);
 
   const calculationResult = useMemo(() => {
     let hasErrors = Object.values(errors).some(e => e);
@@ -131,7 +140,6 @@ export default function App() {
     let status = `Aiming for ${targetGrade}`;
     let message = `You need ${Math.ceil(Math.max(0, required))} marks in the Final.`;
 
-    // CHANGED: Messages now reference the target grade
     if (required <= 0) {
       status = 'Achieved';
       message = `You've already secured the target for a(n) "${targetGrade}" grade.`;
@@ -148,7 +156,7 @@ export default function App() {
       status,
       message,
     };
-  }, [inputs, errors, courseConfig, targetGrade]); // CHANGED: Added targetGrade dependency
+  }, [inputs, errors, courseConfig, targetGrade]);
 
   useEffect(() => {
     if (isDarkMode) {
@@ -203,16 +211,16 @@ export default function App() {
             CSE-25 Grade Calculator
           </h1>
           <div className="flex items-center gap-3">
-            {/* NEW: Target Grade Selector */}
             <select
               value={targetGrade}
               onChange={(e) => setTargetGrade(e.target.value)}
               aria-label="Target Grade"
               className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
-              {Object.keys(GRADE_THRESHOLDS).map(grade => (
+              {/* CHANGED: Display grade and grade points */}
+              {Object.entries(GRADE_THRESHOLDS).map(([grade, data]) => (
                 <option key={grade} value={grade}>
-                  Target: {grade}
+                  Target: {grade} ({data.gradePoints.toFixed(2)})
                 </option>
               ))}
             </select>
@@ -308,8 +316,17 @@ export default function App() {
                     <p>1. <strong>Best CT Total:</strong> The sum of the two highest Class Test scores.</p>
                     <p>2. <strong>CT Contribution:</strong> `Best CT Total` (For GEBS-101) or `Best CT Total × 1.5` (for others).</p>
                     <p>3. <strong>Achieved Marks:</strong> `CT Contribution + Mid Term + Attendance + Class Performance`.</p>
-                    <p>4. <strong>Target Marks:</strong> `Total Marks × Grade Percentage` (e.g., for 'A', it's 75%).</p>
+                    <p>4. <strong>Target Marks:</strong> `Total Marks × Grade Percentage` (e.g., for 'A' ({GRADE_THRESHOLDS['A'].gradePoints.toFixed(2)}), it's {GRADE_THRESHOLDS['A'].percentage * 100}% of {courseConfig.totalMarks} marks).</p> {/* CHANGED: Example now includes grade points */}
                     <p>5. <strong>Required for Final:</strong> `Target Marks - Achieved Marks`.</p>
+
+                    <h4 className="font-semibold mt-4 pt-4 border-t border-gray-200 dark:border-gray-600">Grading System:</h4>
+                    <ul className="list-disc pl-5">
+                        {Object.entries(GRADE_THRESHOLDS).map(([grade, data]) => (
+                            <li key={grade}>
+                                <strong>{grade}</strong> ({data.gradePoints.toFixed(2)} CGPA): {data.percentage * 100}% and above
+                            </li>
+                        ))}
+                    </ul>
                 </div>
                  <button onClick={() => setIsInfoVisible(false)} className="mt-6 w-full py-2 px-4 rounded-md text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
                     Got it
