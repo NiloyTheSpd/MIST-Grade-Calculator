@@ -245,7 +245,7 @@ export default function App() {
           </div>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 md:gap-8 lg:gap-12 pb-40 md:pb-0">
+        <div className="grid grid-cols-1 md:grid-cols-2 md:gap-8 lg:gap-12 pb-72 md:pb-0">
           
           <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5">
@@ -255,10 +255,10 @@ export default function App() {
                     <NumberInput name="ct3" label="Class Test 3" value={inputs.ct3} onChange={handleInputChange} min={0} max={20} error={errors.ct3} helperText="We'll take the best two CT scores."/>
                 </div>
                 <hr className="sm:col-span-2 my-2 border-gray-200 dark:border-gray-600"/>
-                <NumberInput name="mid" label="Mid Term" value={inputs.mid} onChange={handleInputChange} min={0} max={courseConfig.midTermMax} error={errors.mid}/>
+                <NumberInput name="performance" label="Class Performance" value={inputs.performance} onChange={handleInputChange} min={0} max={courseConfig.performanceMax} error={errors.performance}/>
                 <NumberInput name="attendance" label="Attendance" value={inputs.attendance} onChange={handleInputChange} min={0} max={courseConfig.attendanceMax} error={errors.attendance}/>
                 <div className="sm:col-span-2">
-                    <NumberInput name="performance" label="Class Performance" value={inputs.performance} onChange={handleInputChange} min={0} max={courseConfig.performanceMax} error={errors.performance}/>
+                    <NumberInput name="mid" label="Mid Term" value={inputs.mid} onChange={handleInputChange} min={0} max={courseConfig.midTermMax} error={errors.mid}/>
                 </div>
             </div>
              <button onClick={handleReset} className="mt-6 w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:bg-gray-500 dark:hover:bg-gray-600 dark:focus:ring-offset-gray-800">
@@ -337,3 +337,4 @@ export default function App() {
     </div>
   );
 }
+
