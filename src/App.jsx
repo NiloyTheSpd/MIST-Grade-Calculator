@@ -69,13 +69,21 @@ export default function App() {
     }
     return false;
   });
-  const [selectedCourseId, setSelectedCourseId] = useState(COURSES[0].id);
+  // CHANGED: replace course selection with a credit selector
+  // value is kept as string because select returns strings; we'll coerce where needed
+  const [selectedCredits, setSelectedCredits] = useState('');
   const [targetGrade, setTargetGrade] = useState('A+');
   const [inputs, setInputs] = useState(INITIAL_INPUTS);
   const [errors, setErrors] = useState({});
   const [isInfoVisible, setIsInfoVisible] = useState(false);
 
-  const selectedCourse = useMemo(() => COURSES.find(c => c.id === selectedCourseId), [selectedCourseId]);
+  // Derive a synthetic selectedCourse from the selectedCredits so existing logic keeps working.
+  // If no selection is made (empty string), default to 3 credits to preserve previous behavior.
+  const selectedCourse = useMemo(() => {
+    const credits = Number(selectedCredits) || 3;
+    // Treat 2-credit selection as GEBS-101-like to preserve its special rules.
+    return { id: credits === 2 ? 'GEBS-101' : 'GEN-3', credits };
+  }, [selectedCredits]);
   
   const courseConfig = useMemo(() => {
     const credits = selectedCourse.credits;
@@ -169,7 +177,7 @@ export default function App() {
   useEffect(() => {
     setInputs(INITIAL_INPUTS);
     setErrors({});
-  }, [selectedCourseId]);
+  }, [selectedCredits]);
 
   const handleInputChange = useCallback((e) => {
     const { name, value } = e.target;
@@ -225,16 +233,14 @@ export default function App() {
               ))}
             </select>
             <select
-              value={selectedCourseId}
-              onChange={(e) => setSelectedCourseId(e.target.value)}
-              aria-label="Course"
+              value={selectedCredits}
+              onChange={(e) => setSelectedCredits(e.target.value)}
+              aria-label="Credit"
               className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
-              {COURSES.map(course => (
-                <option key={course.id} value={course.id}>
-                  {course.name} ({course.credits} CREDIT)
-                </option>
-              ))}
+              <option value="">Select Credit</option>
+              <option value="2">2 Credit</option>
+              <option value="3">3 Credit</option>
             </select>
             <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" aria-label="Toggle dark mode">
               {isDarkMode ? '☀️' : '🌙'}
