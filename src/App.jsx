@@ -1,16 +1,8 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
 
-// --- CONSTANTS & COURSE DATA ---
-const COURSES = [
-  { id: 'CSE-101', name: 'CSE-101', credits: 3 },
-  { id: 'MATH-101', name: 'MATH-101', credits: 3 },
-  { id: 'PHY-101', name: 'PHY-101', credits: 3 },
-  { id: 'CHEM-101', name: 'CHEM-101', credits: 3 },
-  { id: 'EECE-163', name: 'EECE-163', credits: 3 },
-  { id: 'GEBS-101', name: 'GEBS-101', credits: 2 },
-];
+// Constants
 
-// CHANGED: Expanded GRADE_THRESHOLDS to include gradePoints
+// Grade thresholds (percentage of total + grade points)
 const GRADE_THRESHOLDS = {
   'A+': { percentage: 0.80, gradePoints: 4.00 },
   'A': { percentage: 0.75, gradePoints: 3.75 },
@@ -21,21 +13,23 @@ const GRADE_THRESHOLDS = {
   'C+': { percentage: 0.50, gradePoints: 2.50 },
   'C': { percentage: 0.45, gradePoints: 2.25 },
   'D': { percentage: 0.40, gradePoints: 2.00 },
-  'F*': { percentage: 0.00, gradePoints: 0.00 } // Added F* as a selectable target, even if unlikely
+  'F*': { percentage: 0.00, gradePoints: 0.00 } // Added F* as a selectable target, jate manush irony korte pare
 };
 
+// Initial empty inputs
 const INITIAL_INPUTS = {
   ct1: '', ct2: '', ct3: '',
   mid: '', attendance: '', performance: ''
 };
 
-// --- HELPER & CALCULATION FUNCTIONS ---
+// Helper & calculation utilities
 
 const getBestTwoCtSum = (ct1, ct2, ct3) => {
   const scores = [ct1, ct2, ct3].sort((a, b) => b - a);
   return scores[0] + scores[1];
 };
 
+// Reusable numeric input
 const NumberInput = ({ name, label, value, onChange, min, max, error, helperText }) => (
   <div className="relative w-full">
     <label htmlFor={name} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -69,28 +63,27 @@ export default function App() {
     }
     return false;
   });
-  // CHANGED: replace course selection with a credit selector
-  // value is kept as string because select returns strings; we'll coerce where needed
+  
+  // UI state: selected credit ('' | '2' | '3')
   const [selectedCredits, setSelectedCredits] = useState('');
   const [targetGrade, setTargetGrade] = useState('A+');
   const [inputs, setInputs] = useState(INITIAL_INPUTS);
   const [errors, setErrors] = useState({});
   const [isInfoVisible, setIsInfoVisible] = useState(false);
 
-  // Derive a synthetic selectedCourse from the selectedCredits so existing logic keeps working.
-  // If no selection is made (empty string), default to 3 credits to preserve previous behavior.
+  // Derive a lightweight course object from the selected credit so the rest of the
+  // calculations can use the same shape (id, credits). Default to 3 credits.
   const selectedCourse = useMemo(() => {
     const credits = Number(selectedCredits) || 3;
-    // Treat 2-credit selection as GEBS-101-like to preserve its special rules.
     return { id: credits === 2 ? 'GEBS-101' : 'GEN-3', credits };
   }, [selectedCredits]);
   
+  // Compute per-course configuration (max marks, target in marks, CT rules)
   const courseConfig = useMemo(() => {
     const credits = selectedCourse.credits;
     const isThreeCredit = credits === 3;
     const isGebs101 = selectedCourse.id === 'GEBS-101';
-    
-    // CHANGED: Access percentage from the GRADE_THRESHOLDS object
+
     const totalMarks = isThreeCredit ? 300 : 200;
     const target = totalMarks * GRADE_THRESHOLDS[targetGrade].percentage;
 
@@ -101,44 +94,40 @@ export default function App() {
     let applyCtMultiplier = true;
 
     if (isGebs101) {
-        attendanceMax = 10;
-        performanceMax = 10;
-        applyCtMultiplier = false;
-        finalMax = 200 - (40 + 20 + 10 + 10); // 120
+      attendanceMax = 10;
+      performanceMax = 10;
+      applyCtMultiplier = false;
+      finalMax = 200 - (40 + 20 + 10 + 10); // 120
     } else {
-        finalMax = isThreeCredit 
-          ? 300 - (60 + 30 + 15 + 15) // 180
-          : 200 - (60 + 20 + 15 + 15); // 90
+      finalMax = isThreeCredit
+        ? 300 - (60 + 30 + 15 + 15)
+        : 200 - (60 + 20 + 15 + 15);
     }
-      
+
     return {
       credits,
-      totalMarks, // NEW: added for info display
+      totalMarks,
       target,
       finalMax,
       midTermMax,
       attendanceMax,
       performanceMax,
-      applyCtMultiplier
+      applyCtMultiplier,
     };
   }, [selectedCourse, targetGrade]);
 
   const calculationResult = useMemo(() => {
-    let hasErrors = Object.values(errors).some(e => e);
-    
+    // Validate inputs and compute required final marks
+    let hasErrors = Object.values(errors).some(Boolean);
+
     const parsedInputs = Object.fromEntries(
-        Object.entries(inputs).map(([key, value]) => [key, value === '' ? 0 : parseFloat(value)])
+      Object.entries(inputs).map(([key, value]) => [key, value === '' ? 0 : parseFloat(value)])
     );
 
     const { ct1, ct2, ct3, mid, attendance, performance } = parsedInputs;
 
-    if (Object.values(parsedInputs).some(isNaN)) {
-        hasErrors = true;
-    }
-    
-    if (hasErrors) {
-      return { isValid: false };
-    }
+    if (Object.values(parsedInputs).some(isNaN)) hasErrors = true;
+    if (hasErrors) return { isValid: false };
 
     const bestTwoSum = getBestTwoCtSum(ct1, ct2, ct3);
     const ctContribution = courseConfig.applyCtMultiplier ? bestTwoSum * 1.5 : bestTwoSum;
@@ -174,35 +163,37 @@ export default function App() {
     }
   }, [isDarkMode]);
   
+  // Reset inputs when selected credit changes
   useEffect(() => {
     setInputs(INITIAL_INPUTS);
     setErrors({});
   }, [selectedCredits]);
 
-  const handleInputChange = useCallback((e) => {
-    const { name, value } = e.target;
-    
-    setInputs(prev => ({ ...prev, [name]: value }));
+  // Input change handler with validation
+  const handleInputChange = useCallback(
+    (e) => {
+      const { name, value } = e.target;
+      setInputs((prev) => ({ ...prev, [name]: value }));
 
-    let errorMsg = '';
-    const numValue = parseFloat(value);
-    
-    if (value !== '' && isNaN(numValue)) {
-      errorMsg = 'Must be a number.';
-    } else if (!isNaN(numValue)) {
-      let min = 0, max = 0;
-      if (name.startsWith('ct')) { max = 20; }
-      else if (name === 'mid') { max = courseConfig.midTermMax; }
-      else if (name === 'attendance') { max = courseConfig.attendanceMax; }
-      else if (name === 'performance') { max = courseConfig.performanceMax; }
+      let errorMsg = '';
+      const numValue = parseFloat(value);
 
-      if (numValue < min || numValue > max) {
-        errorMsg = `Must be between ${min} and ${max}.`;
+      if (value !== '' && isNaN(numValue)) errorMsg = 'Must be a number.';
+      else if (!isNaN(numValue)) {
+        let min = 0,
+          max = 0;
+        if (name.startsWith('ct')) max = 20;
+        else if (name === 'mid') max = courseConfig.midTermMax;
+        else if (name === 'attendance') max = courseConfig.attendanceMax;
+        else if (name === 'performance') max = courseConfig.performanceMax;
+
+        if (numValue < min || numValue > max) errorMsg = `Must be between ${min} and ${max}.`;
       }
-    }
-    setErrors(prev => ({ ...prev, [name]: errorMsg }));
 
-  }, [courseConfig]);
+      setErrors((prev) => ({ ...prev, [name]: errorMsg }));
+    },
+    [courseConfig]
+  );
 
   const handleReset = () => {
     setInputs(INITIAL_INPUTS);
