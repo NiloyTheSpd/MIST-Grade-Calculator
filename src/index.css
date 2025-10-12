@@ -8,3 +8,118 @@ html {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Blurred full-screen background image */
+html, body { height: 100%; }
+body { background: transparent; }
+
+/* Blurred background image (local file in /public) */
+body::before {
+	content: "";
+	position: fixed;
+	inset: 0;
+	z-index: -2; /* keep behind overlay */
+	pointer-events: none;
+		/* Prefer the uploaded photographic background in /public/campus-bg.jpg; fallback to svg if needed */
+		background-image: url('/campus-bg.jpg');
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	filter: blur(10px) saturate(100%);
+	transform: scale(1.03);
+}
+
+/* Ensure main app content sits above the background */
+#__root_app_container{
+	position: relative;
+	z-index: 10;
+}
+/* Subtle dark overlay to improve contrast */
+body::after {
+	content: "";
+	position: fixed;
+	inset: 0;
+	z-index: -1; /* sits above the blurred image but behind the app */
+	pointer-events: none;
+	background: rgba(0,0,0,0.22); /* ~22% dark overlay */
+}
+
+/* Reduce blur on small screens and for reduced-motion/data preferences */
+@media (max-width: 640px), (prefers-reduced-motion: reduce), (prefers-reduced-data: reduce) {
+	body::before { filter: blur(6px) saturate(90%); background-attachment: scroll; }
+	body::after { background: rgba(0,0,0,0.28); }
+}
+
+/* Reusable glass card style */
+.glass-card {
+	background: rgba(255,255,255,0.6);
+	backdrop-filter: blur(6px) saturate(110%);
+	-webkit-backdrop-filter: blur(6px) saturate(110%);
+	border: 1px solid rgba(255,255,255,0.45);
+}
+.dark .glass-card,
+:is(.dark) .glass-card {
+	background: rgba(17,24,39,0.55); /* dark slate with transparency */
+	border: 1px solid rgba(255,255,255,0.06);
+}
+
+.glass-card .card-content {
+	background: transparent; /* inner content stays transparent */
+}
+
+/* Glass-style input/select fields */
+.glass-input{
+	background: rgba(255,255,255,0.65);
+	-webkit-backdrop-filter: blur(6px) saturate(110%);
+	backdrop-filter: blur(6px) saturate(110%);
+	border: 1px solid rgba(255,255,255,0.5);
+	padding: .5rem .75rem;
+	border-radius: .5rem;
+	box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+	color: #0f172a; /* near-black text */
+}
+.glass-input:focus{ outline:none; box-shadow:0 0 0 3px rgba(99,102,241,0.12); }
+.dark .glass-input, :is(.dark) .glass-input{
+	background: rgba(17,24,39,0.55);
+	border: 1px solid rgba(255,255,255,0.06);
+	color: #e6eef6;
+}
+
+/* Custom dropdown list styling for our JS-driven select */
+.custom-select {
+	position: relative;
+	display: inline-block;
+}
+.custom-select-trigger {
+	display: inline-flex;
+	align-items: center;
+	gap: .5rem;
+}
+.custom-select-list {
+	position: absolute;
+	top: calc(100% + 0.5rem);
+	right: 0;
+	min-width: 12rem;
+	background: rgba(255,255,255,0.65);
+	-webkit-backdrop-filter: blur(8px) saturate(110%);
+	backdrop-filter: blur(8px) saturate(110%);
+	border: 1px solid rgba(255,255,255,0.5);
+	box-shadow: 0 8px 24px rgba(2,6,23,0.16);
+	border-radius: .375rem;
+	z-index: 50;
+	padding: .25rem 0;
+}
+.custom-select-item {
+	padding: .5rem 1rem;
+	cursor: pointer;
+	color: #0f172a;
+}
+.custom-select-item:hover, .custom-select-item[aria-selected="true"]{
+	background: rgba(99,102,241,0.08);
+}
+.dark .custom-select-list, :is(.dark) .custom-select-list{
+	background: rgba(17,24,39,0.6);
+	border: 1px solid rgba(255,255,255,0.06);
+}
+.dark .custom-select-item, :is(.dark) .custom-select-item{ color: #e6eef6 }

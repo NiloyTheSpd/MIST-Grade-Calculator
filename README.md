@@ -41,6 +41,9 @@ Project notes
 - This project uses Tailwind CSS. A small global rule `text-size-adjust` has been added in `src/index.css` to improve browser compatibility for text sizing.
 - The course dropdown was simplified into a credit selector ("Select Credit", "2 Credit", "3 Credit") and the logic derives a synthetic course to preserve behavior. 2-credit selection follows GEBS-101 rules.
 
+Background image
+- Place your campus/background image at `public/campus-bg.jpg`. The app will use that file for the blurred background. If you don't provide one, the app will try to load `/campus-bg.jpg` and fall back to a blank background.
+
 License
 This project is licensed under the MIT License — see `LICENSE`.
 

@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import { useRef } from 'react';
 
 // Constants
 
@@ -32,7 +33,7 @@ const getBestTwoCtSum = (ct1, ct2, ct3) => {
 // Reusable numeric input
 const NumberInput = ({ name, label, value, onChange, min, max, error, helperText }) => (
   <div className="relative w-full">
-    <label htmlFor={name} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+    <label htmlFor={name} className="block text-sm font-medium text-black mb-1">
       {label}
     </label>
     <input
@@ -203,36 +204,25 @@ export default function App() {
   const toggleTheme = () => setIsDarkMode(!isDarkMode);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 font-sans transition-colors duration-300">
+  <div id="__root_app_container" className="min-h-screen text-gray-800 dark:text-gray-200 font-sans transition-colors duration-300">
       <main className="max-w-6xl mx-auto p-4 md:p-8">
         <header className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
-          <h1 className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400">
+          <h1 className="text-2xl sm:text-3xl font-bold text-white dark:text-white">
             MIST Grade Calculator
           </h1>
           <div className="flex items-center gap-3">
-            <select
+            <SimpleSelect
               value={targetGrade}
-              onChange={(e) => setTargetGrade(e.target.value)}
-              aria-label="Target Grade"
-              className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            >
-              {/* CHANGED: Display grade and grade points */}
-              {Object.entries(GRADE_THRESHOLDS).map(([grade, data]) => (
-                <option key={grade} value={grade}>
-                  Target: {grade} ({data.gradePoints.toFixed(2)})
-                </option>
-              ))}
-            </select>
-            <select
+              onChange={(v) => setTargetGrade(v)}
+              options={Object.entries(GRADE_THRESHOLDS).map(([grade, data]) => ({ value: grade, label: `Target: ${grade} (${data.gradePoints.toFixed(2)})` }))}
+              ariaLabel="Target Grade"
+            />
+            <SimpleSelect
               value={selectedCredits}
-              onChange={(e) => setSelectedCredits(e.target.value)}
-              aria-label="Credit"
-              className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            >
-              <option value="">Select Credit</option>
-              <option value="2">2 Credit</option>
-              <option value="3">3 Credit</option>
-            </select>
+              onChange={(v) => setSelectedCredits(v)}
+              options={[{ value: '', label: 'Select Credit' }, { value: '2', label: '2 Credit' }, { value: '3', label: '3 Credit' }]}
+              ariaLabel="Credit"
+            />
             <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" aria-label="Toggle dark mode">
               {isDarkMode ? '☀️' : '🌙'}
             </button>
@@ -244,7 +234,7 @@ export default function App() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 md:gap-8 lg:gap-12 pb-72 md:pb-0">
           
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+          <div className="glass-card p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5">
                 <NumberInput name="ct1" label="Class Test 1" value={inputs.ct1} onChange={handleInputChange} min={0} max={20} error={errors.ct1} />
                 <NumberInput name="ct2" label="Class Test 2" value={inputs.ct2} onChange={handleInputChange} min={0} max={20} error={errors.ct2} />
@@ -263,8 +253,9 @@ export default function App() {
             </button>
           </div>
           
-          <div className="fixed bottom-0 left-0 right-0 md:relative bg-white dark:bg-gray-800 p-6 md:rounded-2xl shadow-[0_-5px_15px_-3px_rgba(0,0,0,0.1)] md:shadow-lg border-t-2 border-indigo-500 md:border-2 md:border-gray-200 dark:md:border-gray-700 flex flex-col justify-center items-center text-center z-10">
-              <h2 className="text-lg font-medium text-gray-600 dark:text-gray-400 mb-2">Required Marks for Final</h2>
+      <div className="glass-card fixed bottom-0 left-0 right-0 md:relative p-6 md:rounded-2xl shadow-[0_-5px_15px_-3px_rgba(0,0,0,0.1)] md:shadow-lg border-t-2 border-indigo-500 md:border-2 md:border-gray-200 dark:md:border-gray-700 flex flex-col justify-center items-center text-center z-10">
+        <h1 className="text-2xl sm:text-3xl font-bold text-white dark:text-white mb-4">MIST Grade Calculator</h1>
+        <h2 className="text-lg font-medium text-black mb-2">Required Marks for Final</h2>
               
               <div aria-live="polite" className="w-full">
                 {!calculationResult.isValid ? (
@@ -289,18 +280,18 @@ export default function App() {
                             {calculationResult.status}
                         </span>
 
-                        <p className="text-sm text-gray-600 dark:text-gray-300 mt-4 h-10">
-                            {calculationResult.message}
-                        </p>
+            <p className="text-sm text-black mt-4 h-10">
+              {calculationResult.message}
+            </p>
                     </>
                 )}
               </div>
               
-              <div className="w-full border-t border-gray-200 dark:border-gray-700 mt-4 pt-4 text-xs text-gray-500 dark:text-gray-400 flex justify-around">
-                  <span>Achieved: <strong>{calculationResult.isValid ? calculationResult.achieved : '...'}</strong></span>
-                  <span>Target: <strong>{courseConfig.target}</strong></span>
-                  <span>Final Max: <strong>{courseConfig.finalMax}</strong></span>
-              </div>
+        <div className="w-full border-t border-gray-200 dark:border-gray-700 mt-4 pt-4 text-xs text-black flex justify-around">
+          <span>Achieved: <strong>{calculationResult.isValid ? calculationResult.achieved : '...'}</strong></span>
+          <span>Target: <strong>{courseConfig.target}</strong></span>
+          <span>Final Max: <strong>{courseConfig.finalMax}</strong></span>
+        </div>
           </div>
         </div>
       </main>
@@ -330,6 +321,53 @@ export default function App() {
                 </button>
             </div>
          </div>
+      )}
+    </div>
+  );
+}
+
+function SimpleSelect({ value, onChange, options, ariaLabel }){
+  const [open, setOpen] = useState(false);
+  const [highlight, setHighlight] = useState(0);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if(value === '' ) setHighlight(0);
+    else {
+      const idx = options.findIndex(o => o.value === value);
+      if(idx >= 0) setHighlight(idx);
+    }
+  }, [value, options]);
+
+  useEffect(() => {
+    function onDoc(e){ if(open && !ref.current?.contains(e.target)) setOpen(false); }
+    document.addEventListener('mousedown', onDoc);
+    return () => document.removeEventListener('mousedown', onDoc);
+  }, [open]);
+
+  const toggle = () => setOpen(s => !s);
+
+  const handleKey = (e) => {
+    if(e.key === 'ArrowDown'){ e.preventDefault(); setOpen(true); setHighlight(h => Math.min(h+1, options.length-1)); }
+    else if(e.key === 'ArrowUp'){ e.preventDefault(); setHighlight(h => Math.max(h-1, 0)); }
+    else if(e.key === 'Enter'){ e.preventDefault(); const sel = options[highlight]; if(sel) { onChange(sel.value); setOpen(false);} }
+    else if(e.key === 'Escape'){ setOpen(false); }
+  }
+
+  return (
+    <div className="custom-select" ref={ref}>
+      <button aria-label={ariaLabel} onClick={toggle} onKeyDown={handleKey} className="glass-input custom-select-trigger">
+        <span>{(options.find(o => o.value === value) || options[0]).label}</span>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 7l4 4 4-4" stroke="#0f172a" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      </button>
+      {open && (
+        <div role="listbox" className="custom-select-list" tabIndex={-1}>
+          {options.map((opt, i) => (
+            <div key={opt.value+i} role="option" aria-selected={opt.value === value} className="custom-select-item" onClick={() => { onChange(opt.value); setOpen(false); }} onMouseEnter={() => setHighlight(i)}>
+              {opt.label}
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );

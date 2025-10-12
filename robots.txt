@@ -1,0 +1,7 @@
+# robots.txt for grade-calculator
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Sitemap location (replace with your site's absolute URL)
+Sitemap: https://example.com/sitemap.xml
