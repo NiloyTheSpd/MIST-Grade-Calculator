@@ -205,7 +205,7 @@ export default function App() {
 
   return (
   <div id="__root_app_container" className="min-h-screen text-gray-800 dark:text-gray-200 font-sans transition-colors duration-300">
-      <main className="max-w-6xl mx-auto p-4 md:p-8">
+      <main className="max-w-6xl mx-auto p-2 md:p-8">
         <header className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
           <h1 className="text-2xl sm:text-3xl font-bold text-white dark:text-white">
             MIST Grade Calculator
@@ -232,7 +232,7 @@ export default function App() {
           </div>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 md:gap-8 lg:gap-12 pb-72 md:pb-0">
+        <div className="grid grid-cols-1 md:grid-cols-2 md:gap-8 lg:gap-12">
           
           <div className="glass-card p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5">
@@ -253,7 +253,7 @@ export default function App() {
             </button>
           </div>
           
-      <div className="glass-card fixed bottom-0 left-0 right-0 md:relative p-6 md:rounded-2xl shadow-[0_-5px_15px_-3px_rgba(0,0,0,0.1)] md:shadow-lg border-t-2 border-indigo-500 md:border-2 md:border-gray-200 dark:md:border-gray-700 flex flex-col justify-center items-center text-center z-10">
+      <div className="glass-card p-6 pt-16 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 flex flex-col justify-center items-center text-center">
         <h1 className="text-2xl sm:text-3xl font-bold text-white dark:text-white mb-4">MIST Grade Calculator</h1>
         <h2 className="text-lg font-medium text-black mb-2">Required Marks for Final</h2>
               
