@@ -206,8 +206,8 @@ export default function App() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 font-sans transition-colors duration-300">
       <main className="max-w-6xl mx-auto p-4 md:p-8">
         <header className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
-          <h1 className="text-2xl sm:text-3xl font-bold text-indigo-600 dark:text-indigo-400">
-            CSE-25 Grade Calculator
+          <h1 className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400">
+            MIST Grade Calculator
           </h1>
           <div className="flex items-center gap-3">
             <select

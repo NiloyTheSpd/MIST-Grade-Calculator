@@ -1,6 +1,6 @@
-# CSE-25 Grade Calculator
+# MIST Grade Calculator
 
-A small React + Vite + Tailwind project for calculating final exam marks required to achieve a target grade in CSE-25 style courses.
+A small React + Vite + Tailwind project for calculating final exam marks required to achieve a target grade in MIST-style courses.
 
 Features
 - Enter Class Test (CT) scores, Midterm, Attendance and Class Performance marks.
