@@ -264,7 +264,7 @@ export default function App() {
                     </div>
                 ) : (
                     <>
-                        <p className={`text-6xl font-bold mb-3 transition-colors ${
+            <p className={`preserve-color text-6xl font-bold mb-3 transition-colors ${
                             calculationResult.status === 'Achieved' ? 'text-green-500' : 
                             calculationResult.status === 'Not Possible' ? 'text-red-500' : 
                             'text-indigo-600 dark:text-indigo-400'

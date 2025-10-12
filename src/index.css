@@ -30,6 +30,12 @@ body::before {
 	transform: scale(1.03);
 }
 
+/* When dark mode is active (documentElement has .dark), use the darker background image */
+.dark body::before,
+:is(.dark) body::before {
+    background-image: url('/campus-bg-nt.jpg');
+}
+
 /* Ensure main app content sits above the background */
 #__root_app_container{
 	position: relative;
@@ -123,3 +129,35 @@ body::after {
 	border: 1px solid rgba(255,255,255,0.06);
 }
 .dark .custom-select-item, :is(.dark) .custom-select-item{ color: #e6eef6 }
+
+/* Night-mode: ensure all visible text is white for high contrast */
+/* This overrides utility classes (defined earlier) when .dark is added to documentElement */
+.dark body,
+:is(.dark) body {
+	color: #ffffff;
+}
+.dark body * ,
+:is(.dark) body * {
+	color: #ffffff;
+}
+
+/* Ensure utility text classes also resolve to white in dark mode for labels/results */
+.dark .text-black, :is(.dark) .text-black,
+.dark .text-gray-800, :is(.dark) .text-gray-800,
+.dark .text-gray-500, :is(.dark) .text-gray-500,
+.dark .text-gray-600, :is(.dark) .text-gray-600,
+.dark .text-gray-400, :is(.dark) .text-gray-400 {
+	color: #ffffff !important;
+}
+
+/* Keep input placeholders muted in dark mode for legibility */
+.dark input::placeholder, :is(.dark) input::placeholder,
+.dark textarea::placeholder, :is(.dark) textarea::placeholder {
+	color: rgba(230,238,246,0.6);
+}
+
+/* Keep the large required-number colored even in dark mode */
+.dark .preserve-color.text-indigo-600, :is(.dark) .preserve-color.text-indigo-600 { color: #4f46e5 !important; }
+.dark .preserve-color.text-indigo-400, :is(.dark) .preserve-color.text-indigo-400 { color: #9f9df6 !important; }
+.dark .preserve-color.text-red-500, :is(.dark) .preserve-color.text-red-500 { color: #ef4444 !important; }
+.dark .preserve-color.text-green-500, :is(.dark) .preserve-color.text-green-500 { color: #22c55e !important; }
