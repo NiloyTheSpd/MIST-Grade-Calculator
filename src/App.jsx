@@ -224,10 +224,10 @@ export default function App() {
               ariaLabel="Credit"
             />
             <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" aria-label="Toggle dark mode">
-              {isDarkMode ? '☀️' : '🌙'}
+              {isDarkMode ? <div className="i-mdi-weather-sunny text-2xl" /> : <div className="i-mdi-weather-night text-2xl" />}
             </button>
              <button onClick={() => setIsInfoVisible(true)} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" aria-label="Show calculation info">
-              ℹ️
+              <div className="i-mdi-information text-2xl" />
             </button>
           </div>
         </header>
