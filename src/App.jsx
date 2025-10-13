@@ -294,12 +294,7 @@ export default function App() {
         </div>
           </div>
         </div>
-        <div className="card-blue mt-4">
-          This is a dynamic card.
-        </div>
       </main>
-
-
 
       {isInfoVisible && (
          <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4" onClick={() => setIsInfoVisible(false)}>
@@ -377,4 +372,3 @@ function SimpleSelect({ value, onChange, options, ariaLabel }){
     </div>
   );
 }
-
