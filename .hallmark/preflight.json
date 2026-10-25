@@ -1,0 +1,33 @@
+{
+  "scanned": "2026-10-25",
+  "findings": {
+    "fonts": "No custom font. UnoCSS preset-uno default sans stack (ui-sans-serif, system-ui, Segoe UI, Roboto). No font link in index.html (src/index.css L1-L17).",
+    "palette": "No :root token block. Literal colours in src/index.css: #0f172a L93/L120/L131, #e6eef6 L99/L138, #ffffff L144, #4f46e5 L167, #9f9df6 L168, #ef4444 L169, #22c55e L170, rgba() glass surfaces L69-138, rgba(0,0,0,0.22) L58, rgba(0,0,0,0.28) L64.",
+    "motion": "No animation library. CSS transition-colors duration-300 (src/App.jsx L207), transition-colors on inputs L48, hover transitions on buttons L251/L319.",
+    "spacing": "UnoCSS preset-uno default scale. Tailwind-style classes: max-w-6xl, p-6, gap-8, lg:gap-12, mb-8, mt-6, py-2, px-4.",
+    "framework": "React 18.2 + Vite 4.5 + UnoCSS 66.5 (preset-uno, preset-attributify, preset-icons). Single page, single route. State in React hooks. No router.",
+    "imagery": "Two photographic backgrounds the project owns: public/campus-bg.jpg (day, MIST campus skyline at sunset) and public/campus-bg-nt.jpg (night, MIST Tower 4 facade). Currently used as a blurred full-screen backdrop at src/index.css L19-L44.",
+    "structure": "src/App.jsx: header with two custom selects + dark toggle + info button (L209-L233); two-column grid, input card L237-L254, result card L256-L295; info modal L299-L324; SimpleSelect custom listbox L329-L374."
+  },
+  "preserve": [
+    "All calculation logic exactly as written (GRADE_THRESHOLDS L7-L18, getBestTwoCtSum L28-L31, courseConfig L83-L118, calculationResult L120-L157).",
+    "Validation bounds and error messages (handleInputChange L174-L197).",
+    "Both campus photographs, used as real material rather than as a blurred wash.",
+    "Dark mode as a first-class mode with a real toggle (L61-L65, L159-L165).",
+    "The info modal's formula explanation and grading table (L299-L324).",
+    "Accessibility affordances already present: aria-live on the result (L260), aria-label on the selects and buttons, keyboard support in SimpleSelect (L350-L355)."
+  ],
+  "introduce": [
+    "A :root token block (tokens.css) so every colour and font stops being literal.",
+    "A visual story-telling structure: a scroll arc that tells the grade story instead of two cards on a blurred photo.",
+    "A theme, dealt, carrying palette balance, type voice and surfaces.",
+    "A hero posture, a nav, a footer, and a signature object.",
+    "Floor compliance: overflow-x clip, focus-visible on every interactive element, reduced-motion fallbacks, no transition: all, container caps.",
+    "One idea per screen and a word budget per screen."
+  ],
+  "notes": [
+    "pnpm is unavailable on this machine (mise shim error); npm 11.20.0 was used to install the same lockfile-equivalent dependency set. pnpm-lock.yaml left untouched.",
+    "puppeteer-core was installed with --no-save for the render tier only; it is not a project dependency.",
+    "No design.md, no .hallmark/brand-spec.md, no AGENTS.md, no Inspo MCP server on the session. No TOGETHER_API_KEY check run yet."
+  ]
+}

@@ -1,0 +1,34 @@
+[
+ {
+  "shape": "Workbench",
+  "theme": "Sport",
+  "axes": [
+   "light",
+   "display-condensed",
+   "chromatic-volt"
+  ],
+  "hero": "Stage",
+  "nav": "slab bar",
+  "footer": "colophon block",
+  "imagery": "photographs 2, the product in the hero",
+  "photos": [
+   "campus-day",
+   "campus-night"
+  ],
+  "entry": "Redesign of MIST Grade Calculator as a visual story: the grade sheet as a ledger, the Final as its last row",
+  "fingerprint": "mist-grade-calculator-see-2d26-16cfe740",
+  "sections": [
+   "Hero (the sheet)",
+   "Six marks on the sheet",
+   "Two credits, or three",
+   "What each grade takes",
+   "MIST at the hour the semester ends",
+   "Footer"
+  ],
+  "signature": "the grade sheet as a ledger, the Final is its last row",
+  "waived": [],
+  "prompt": "See the Whole UI and re-imagine it in a visual story-telling way and plan for it",
+  "date": "2026-10-25",
+  "mode": "build"
+ }
+]

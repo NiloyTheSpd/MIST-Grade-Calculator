@@ -1,5 +1,4 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
-import { useRef } from 'react';
+import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 
 // Constants
 
@@ -14,14 +13,26 @@ const GRADE_THRESHOLDS = {
   'C+': { percentage: 0.50, gradePoints: 2.50 },
   'C': { percentage: 0.45, gradePoints: 2.25 },
   'D': { percentage: 0.40, gradePoints: 2.00 },
-  'F*': { percentage: 0.00, gradePoints: 0.00 } // Added F* as a selectable target, jate manush irony korte pare
+  'F*': { percentage: 0.00, gradePoints: 0.00 }
 };
+
+const GRADE_ORDER = Object.keys(GRADE_THRESHOLDS);
 
 // Initial empty inputs
 const INITIAL_INPUTS = {
   ct1: '', ct2: '', ct3: '',
   mid: '', attendance: '', performance: ''
 };
+
+// The ledger rows of the sheet, in the order the semester is marked.
+const SCORE_ROWS = [
+  { name: 'ct1', label: 'Class Test 1', max: 20 },
+  { name: 'ct2', label: 'Class Test 2', max: 20 },
+  { name: 'ct3', label: 'Class Test 3', max: 20, note: 'Best two count' },
+  { name: 'performance', label: 'Performance', max: null },
+  { name: 'attendance', label: 'Attendance', max: null },
+  { name: 'mid', label: 'Mid Term', max: null }
+];
 
 // Helper & calculation utilities
 
@@ -31,29 +42,29 @@ const getBestTwoCtSum = (ct1, ct2, ct3) => {
 };
 
 // Reusable numeric input
-const NumberInput = ({ name, label, value, onChange, min, max, error, helperText }) => (
-  <div className="relative w-full">
-    <label htmlFor={name} className="block text-sm font-medium text-black mb-1">
+const NumberInput = ({ name, label, value, onChange, max, error, note }) => (
+  <div className="row">
+    <label className="row__label" htmlFor={name}>
       {label}
+      {note ? <small>{note}</small> : null}
     </label>
     <input
       type="number"
+      inputMode="numeric"
       id={name}
       name={name}
       value={value}
       onChange={onChange}
-      min={min}
+      min={0}
       max={max}
-      placeholder={`${min}-${max}`}
-      className={`w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border rounded-lg focus:outline-none focus:ring-2 transition-colors
-        ${error
-          ? 'border-red-500 focus:ring-red-400 dark:focus:ring-red-500'
-          : 'border-gray-200 dark:border-gray-600 focus:ring-indigo-400 dark:focus:ring-indigo-500'
-        }
-      `}
+      placeholder={`0-${max}`}
+      className="row__input"
+      aria-invalid={error ? 'true' : undefined}
+      aria-describedby={error ? `${name}-error` : undefined}
     />
-    {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
-    {helperText && !error && <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{helperText}</p>}
+    {error ? (
+      <p className="row__error" id={`${name}-error`}>{error}</p>
+    ) : null}
   </div>
 );
 
@@ -64,7 +75,7 @@ export default function App() {
     }
     return false;
   });
-  
+
   // UI state: selected credit ('' | '2' | '3')
   const [selectedCredits, setSelectedCredits] = useState('');
   const [targetGrade, setTargetGrade] = useState('A+');
@@ -78,7 +89,7 @@ export default function App() {
     const credits = Number(selectedCredits) || 3;
     return { id: credits === 2 ? 'GEBS-101' : 'GEN-3', credits };
   }, [selectedCredits]);
-  
+
   // Compute per-course configuration (max marks, target in marks, CT rules)
   const courseConfig = useMemo(() => {
     const credits = selectedCourse.credits;
@@ -113,7 +124,7 @@ export default function App() {
       midTermMax,
       attendanceMax,
       performanceMax,
-      applyCtMultiplier,
+      applyCtMultiplier
     };
   }, [selectedCourse, targetGrade]);
 
@@ -152,7 +163,7 @@ export default function App() {
       required: Math.ceil(Math.max(0, required)),
       achieved: achieved.toFixed(2),
       status,
-      message,
+      message
     };
   }, [inputs, errors, courseConfig, targetGrade]);
 
@@ -163,7 +174,12 @@ export default function App() {
       document.documentElement.classList.remove('dark');
     }
   }, [isDarkMode]);
-  
+
+  // Mark the document as scripted, so the one reveal can hide itself when JS is off.
+  useEffect(() => {
+    document.documentElement.classList.add('js');
+  }, []);
+
   // Reset inputs when selected credit changes
   useEffect(() => {
     setInputs(INITIAL_INPUTS);
@@ -181,8 +197,8 @@ export default function App() {
 
       if (value !== '' && isNaN(numValue)) errorMsg = 'Must be a number.';
       else if (!isNaN(numValue)) {
-        let min = 0,
-          max = 0;
+        let min = 0;
+        let max = 0;
         if (name.startsWith('ct')) max = 20;
         else if (name === 'mid') max = courseConfig.midTermMax;
         else if (name === 'attendance') max = courseConfig.attendanceMax;
@@ -200,147 +216,363 @@ export default function App() {
     setInputs(INITIAL_INPUTS);
     setErrors({});
   };
-  
+
   const toggleTheme = () => setIsDarkMode(!isDarkMode);
 
+  const rowMax = (name) => {
+    if (name.startsWith('ct')) return 20;
+    if (name === 'mid') return courseConfig.midTermMax;
+    if (name === 'attendance') return courseConfig.attendanceMax;
+    if (name === 'performance') return courseConfig.performanceMax;
+    return 20;
+  };
+
+  const verdictClass = () => {
+    if (!calculationResult.isValid) return '';
+    if (calculationResult.status === 'Achieved') return 'verdict__figure--done';
+    if (calculationResult.status === 'Not Possible') return 'verdict__figure--short';
+    return '';
+  };
+
+  const statusClass = () => {
+    if (calculationResult.status === 'Not Possible') return 'verdict__status--short';
+    if (calculationResult.status === 'Achieved') return 'verdict__status--done';
+    return '';
+  };
+
   return (
-  <div id="__root_app_container" className="min-h-screen text-gray-800 dark:text-gray-200 font-sans transition-colors duration-300">
-      <main className="max-w-6xl mx-auto p-2 md:p-8">
-        <header className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
-          <h1 className="text-2xl sm:text-3xl font-bold text-white dark:text-white">
-            MIST Grade Calculator
-          </h1>
-          <div className="flex items-center gap-3">
-            <SimpleSelect
-              value={targetGrade}
-              onChange={(v) => setTargetGrade(v)}
-              options={Object.entries(GRADE_THRESHOLDS).map(([grade, data]) => ({ value: grade, label: `Target: ${grade} (${data.gradePoints.toFixed(2)})` }))}
-              ariaLabel="Target Grade"
-            />
-            <SimpleSelect
-              value={selectedCredits}
-              onChange={(v) => setSelectedCredits(v)}
-              options={[{ value: '', label: 'Select Credit' }, { value: '2', label: '2 Credit' }, { value: '3', label: '3 Credit' }]}
-              ariaLabel="Credit"
-            />
-            <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" aria-label="Toggle dark mode">
-              {isDarkMode ? <div className="i-mdi-weather-sunny text-2xl" /> : <div className="i-mdi-weather-night text-2xl" />}
-            </button>
-             <button onClick={() => setIsInfoVisible(true)} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" aria-label="Show calculation info">
-              <div className="i-mdi-information text-2xl" />
-            </button>
+    <div id="__root_app_container">
+      <nav className="nav" aria-label="Primary">
+        <div className="container nav__inner">
+          <a className="nav__mark" href="#top" aria-label="MIST Grade Calculator, home">MIST Grade Calculator</a>
+          <div className="nav__links">
+            <a className="nav__link" href="#sheet">The sheet</a>
+            <a className="nav__link" href="#weighting">Weighting</a>
+            <a className="nav__link" href="#ladder">Grades</a>
+            <button className="nav__link" type="button" onClick={() => setIsInfoVisible(true)}>Formula</button>
+          </div>
+        </div>
+      </nav>
+
+      <main id="top">
+        <header className="hero">
+          <div className="container hero__grid">
+            <div className="hero__body">
+              <h1 className="hero__title reveal" style={{ '--i': 0 }}>Your final, worked out</h1>
+              <p className="hero__lead reveal" style={{ '--i': 1 }}>
+                Enter your marks. The sheet says what the Final must be.
+              </p>
+              <div className="hero__actions reveal" style={{ '--i': 2 }}>
+                <a className="btn btn--volt" href="#sheet">Fill the sheet</a>
+                <button className="btn btn--quiet" type="button" onClick={() => setIsInfoVisible(true)}>Read the formula</button>
+              </div>
+            </div>
+
+            <div className="hero__visual reveal" style={{ '--i': 2 }} id="sheet">
+              <form className="sheet" onSubmit={(e) => e.preventDefault()}>
+                <div className="sheet__head">
+                  <span className="sheet__title">Semester sheet</span>
+                  <div className="sheet__controls">
+                    <div className="field">
+                      <label className="field__label" htmlFor="grade-select">Target grade</label>
+                      <SimpleSelect
+                        id="grade-select"
+                        value={targetGrade}
+                        onChange={(v) => setTargetGrade(v)}
+                        options={GRADE_ORDER.map((grade) => ({
+                          value: grade,
+                          label: `${grade} (${GRADE_THRESHOLDS[grade].gradePoints.toFixed(2)})`
+                        }))}
+                        ariaLabel="Target Grade"
+                      />
+                    </div>
+                    <div className="field">
+                      <label className="field__label" htmlFor="credit-select">Credit</label>
+                      <SimpleSelect
+                        id="credit-select"
+                        value={selectedCredits}
+                        onChange={(v) => setSelectedCredits(v)}
+                        options={[
+                          { value: '', label: 'Select Credit' },
+                          { value: '2', label: '2 Credit' },
+                          { value: '3', label: '3 Credit' }
+                        ]}
+                        ariaLabel="Credit"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="verdict" aria-live="polite">
+                  <div>
+                    <span className="verdict__label">Final</span>
+                    {calculationResult.isValid ? (
+                      <>
+                        <span className={`verdict__status ${statusClass()}`}>{calculationResult.status}</span>
+                        <p className="verdict__message">{calculationResult.message}</p>
+                      </>
+                    ) : (
+                      <p className="verdict__message">Enter valid marks to see what the Final must be.</p>
+                    )}
+                  </div>
+                  <span className={`verdict__figure ${verdictClass()}`}>
+                    {calculationResult.isValid ? calculationResult.required : '—'}
+                  </span>
+                </div>
+
+                <div className="sheet__rows">
+                  {SCORE_ROWS.map((row) => (
+                    <NumberInput
+                      key={row.name}
+                      name={row.name}
+                      label={row.label}
+                      note={row.note}
+                      value={inputs[row.name]}
+                      onChange={handleInputChange}
+                      max={rowMax(row.name)}
+                      error={errors[row.name]}
+                    />
+                  ))}
+                </div>
+
+                <div className="figures" aria-label="The semester in figures">
+                  <div className="figures__cell">
+                    <span className="figures__num">{courseConfig.target}</span>
+                    <span className="figures__label">Target marks</span>
+                  </div>
+                  <div className="figures__cell figures__cell--volt">
+                    <span className="figures__num">{calculationResult.isValid ? calculationResult.achieved : '—'}</span>
+                    <span className="figures__label">Achieved so far</span>
+                  </div>
+                  <div className="figures__cell">
+                    <span className="figures__num">{courseConfig.totalMarks}</span>
+                    <span className="figures__label">Semester total</span>
+                  </div>
+                  <div className="figures__cell">
+                    <span className="figures__num">{courseConfig.finalMax}</span>
+                    <span className="figures__label">Final maximum</span>
+                  </div>
+                </div>
+
+                <div className="sheet__reset">
+                  <button className="btn btn--quiet" type="button" onClick={handleReset}>Reset all</button>
+                </div>
+              </form>
+            </div>
           </div>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 md:gap-8 lg:gap-12">
-          
-          <div className="glass-card p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5">
-                <NumberInput name="ct1" label="Class Test 1" value={inputs.ct1} onChange={handleInputChange} min={0} max={20} error={errors.ct1} />
-                <NumberInput name="ct2" label="Class Test 2" value={inputs.ct2} onChange={handleInputChange} min={0} max={20} error={errors.ct2} />
-                <div className="sm:col-span-2">
-                    <NumberInput name="ct3" label="Class Test 3" value={inputs.ct3} onChange={handleInputChange} min={0} max={20} error={errors.ct3} helperText="We'll take the best two CT scores."/>
-                </div>
-                <hr className="sm:col-span-2 my-2 border-gray-200 dark:border-gray-600"/>
-                <NumberInput name="performance" label="Class Performance" value={inputs.performance} onChange={handleInputChange} min={0} max={courseConfig.performanceMax} error={errors.performance}/>
-                <NumberInput name="attendance" label="Attendance" value={inputs.attendance} onChange={handleInputChange} min={0} max={courseConfig.attendanceMax} error={errors.attendance}/>
-                <div className="sm:col-span-2">
-                    <NumberInput name="mid" label="Mid Term" value={inputs.mid} onChange={handleInputChange} min={0} max={courseConfig.midTermMax} error={errors.mid}/>
-                </div>
+        <section className="section section--sheet-end" id="components">
+          <div className="container">
+            <div className="section__head">
+              <h2 className="section__title">Six marks on the sheet</h2>
+              <p className="section__lead">
+                The Final is what is left.
+              </p>
             </div>
-             <button onClick={handleReset} className="mt-6 w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:bg-gray-500 dark:hover:bg-gray-600 dark:focus:ring-offset-gray-800">
-              Reset All
-            </button>
-          </div>
-          
-      <div className="glass-card p-6 pt-16 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 flex flex-col justify-center items-center text-center">
-        <h1 className="text-2xl sm:text-3xl font-bold text-white dark:text-white mb-4">MIST Grade Calculator</h1>
-        <h2 className="text-lg font-medium text-black mb-2">Required Marks for Final</h2>
-              
-              <div aria-live="polite" className="w-full">
-                {!calculationResult.isValid ? (
-                    <div className="text-2xl font-bold text-gray-500 dark:text-gray-400 py-10">
-                        Please enter valid marks.
-                    </div>
-                ) : (
-                    <>
-            <p className={`preserve-color text-6xl font-bold mb-3 transition-colors ${
-                            calculationResult.status === 'Achieved' ? 'text-green-500' : 
-                            calculationResult.status === 'Not Possible' ? 'text-red-500' : 
-                            'text-indigo-600 dark:text-indigo-400'
-                        }`}>
-                            {calculationResult.required}
-                        </p>
-                        
-                        <span className={`px-3 py-1 text-sm font-semibold rounded-full ${
-                            calculationResult.status === 'Achieved' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
-                            calculationResult.status === 'Not Possible' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' :
-                            'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200'
-                        }`}>
-                            {calculationResult.status}
-                        </span>
-
-            <p className="text-sm text-black mt-4 h-10">
-              {calculationResult.message}
+            <table className="table table--sheet">
+              <thead>
+                <tr>
+                  <th scope="col">Component</th>
+                  <th scope="col">Maximum</th>
+                  <th scope="col">Counted</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="table__name">Class tests</td>
+                  <td className="table__num">3 × 20</td>
+                  <td>Best two count</td>
+                </tr>
+                <tr>
+                  <td className="table__name">Mid term</td>
+                  <td className="table__num">30</td>
+                  <td>One sitting, marked whole</td>
+                </tr>
+                <tr>
+                  <td className="table__name">Attendance</td>
+                  <td className="table__num">15</td>
+                  <td>Counted as earned</td>
+                </tr>
+                <tr>
+                  <td className="table__name">Performance</td>
+                  <td className="table__num">15</td>
+                  <td>Counted as earned</td>
+                </tr>
+                <tr className="is-current">
+                  <td className="table__name">Final</td>
+                  <td className="table__num">180</td>
+                  <td>What the sheet works out</td>
+                </tr>
+              </tbody>
+            </table>
+            <p className="table__foot">
+              The Final carries 180 of 300 marks. Everything before it is earned;
+              the rest is the one exam left.
             </p>
-                    </>
-                )}
-              </div>
-              
-        <div className="w-full border-t border-gray-200 dark:border-gray-700 mt-4 pt-4 text-xs text-black flex justify-around">
-          <span>Achieved: <strong>{calculationResult.isValid ? calculationResult.achieved : '...'}</strong></span>
-          <span>Target: <strong>{courseConfig.target}</strong></span>
-          <span>Final Max: <strong>{courseConfig.finalMax}</strong></span>
-        </div>
           </div>
-        </div>
+        </section>
+
+        <section className="section section--tight" id="weighting">
+          <div className="container">
+            <div className="section__head">
+              <h2 className="section__title">Two credits, or three</h2>
+              <p className="section__lead">
+                The course you pick sets the weightings.
+              </p>
+            </div>
+            <div className="weighting">
+              <div className="weighting__col">
+                <h3 className="weighting__title">3 Credit</h3>
+                <p className="weighting__note">The general course.</p>
+                <div className="weighting__line"><span>Semester total</span><span>300</span></div>
+                <div className="weighting__line"><span>CT weight</span><span>× 1.5</span></div>
+                <div className="weighting__line"><span>Mid term</span><span>30</span></div>
+                <div className="weighting__line"><span>Attendance</span><span>15</span></div>
+                <div className="weighting__line"><span>Performance</span><span>15</span></div>
+                <div className="weighting__line"><span>Final maximum</span><span>180</span></div>
+              </div>
+              <div className="weighting__col">
+                <h3 className="weighting__title">2 Credit</h3>
+                <p className="weighting__note">GEBS-101: CT sum not weighted.</p>
+                <div className="weighting__line"><span>Semester total</span><span>200</span></div>
+                <div className="weighting__line"><span>CT weight</span><span>× 1</span></div>
+                <div className="weighting__line"><span>Mid term</span><span>20</span></div>
+                <div className="weighting__line"><span>Attendance</span><span>10</span></div>
+                <div className="weighting__line"><span>Performance</span><span>10</span></div>
+                <div className="weighting__line"><span>Final maximum</span><span>120</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="section section--ink section--ink-end" id="ladder">
+          <div className="container">
+            <div className="section__head">
+              <h2 className="section__title">What each grade takes</h2>
+              <p className="section__lead">
+                The share of the semester total, then the CGPA point.
+              </p>
+            </div>
+            <div className="ladder__legend">
+              <span>Percentage of the semester total, then the CGPA point. F* is the floor: 0%, and no grade below it.</span>
+            </div>
+            <div className="ladder">
+              {GRADE_ORDER.map((grade) => (
+                <div className={`ladder__cell${grade === 'A+' ? ' ladder__cell--top' : ''}`} key={grade}>
+                  <span className="ladder__grade">{grade}</span>
+                  <span className="ladder__pct">{Math.round(GRADE_THRESHOLDS[grade].percentage * 100)}%</span>
+                  <span className="ladder__points">{GRADE_THRESHOLDS[grade].gradePoints.toFixed(2)}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="campus" id="campus">
+          <figure className="band">
+            <div className="band__photo" data-slot="campus-day">
+              <img src="/campus-bg.jpg" alt="The MIST campus buildings seen across the trees at sunset" width="1080" height="675" loading="lazy" />
+            </div>
+            <figcaption className="band__caption">The campus, at the hour the semester ends.</figcaption>
+          </figure>
+          <div className="container campus__grid">
+            <div className="campus__photo" data-slot="campus-night">
+              <img src="/campus-bg-nt.jpg" alt="Tower 4 at night, the lit sky between the two blocks and the sky-bridge above the tree." width="960" height="1280" loading="lazy" />
+            </div>
+            <div className="campus__inner">
+              <h2 className="campus__title">MIST at the hour the semester ends</h2>
+              <p className="campus__note">
+                Tower 4, after the light goes. The sheet above is the part you can still change.
+              </p>
+            </div>
+          </div>
+        </section>
       </main>
 
-      {isInfoVisible && (
-         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4" onClick={() => setIsInfoVisible(false)}>
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-md w-full p-6" onClick={e => e.stopPropagation()}>
-                <h3 className="text-xl font-bold mb-4">Calculation Formula</h3>
-                <div className="space-y-3 text-sm text-gray-600 dark:text-gray-300">
-                    <p>1. <strong>Best CT Total:</strong> The sum of the two highest Class Test scores.</p>
-                    <p>2. <strong>CT Contribution:</strong> `Best CT Total` (For GEBS-101) or `Best CT Total × 1.5` (for others).</p>
-                    <p>3. <strong>Achieved Marks:</strong> `CT Contribution + Mid Term + Attendance + Class Performance`.</p>
-                    <p>4. <strong>Target Marks:</strong> `Total Marks × Grade Percentage` (e.g., for 'A' ({GRADE_THRESHOLDS['A'].gradePoints.toFixed(2)}), it's {GRADE_THRESHOLDS['A'].percentage * 100}% of {courseConfig.totalMarks} marks).</p> {/* CHANGED: Example now includes grade points */}
-                    <p>5. <strong>Required for Final:</strong> `Target Marks - Achieved Marks`.</p>
-
-                    <h4 className="font-semibold mt-4 pt-4 border-t border-gray-200 dark:border-gray-600">Grading System:</h4>
-                    <ul className="list-disc pl-5">
-                        {Object.entries(GRADE_THRESHOLDS).map(([grade, data]) => (
-                            <li key={grade}>
-                                <strong>{grade}</strong> ({data.gradePoints.toFixed(2)} CGPA): {data.percentage * 100}% and above
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                 <button onClick={() => setIsInfoVisible(false)} className="mt-6 w-full py-2 px-4 rounded-md text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
-                    Got it
-                </button>
+      <footer className="footer" id="about">
+        <div className="container footer__inner">
+          <span className="footer__mark">MIST Grade Calculator</span>
+          <div className="footer__colophon">
+            <p>
+              Best two class tests count, weighted by 1.5 outside GEBS-101.
+            </p>
+            <p>
+              Built by NiloyTheSpd. The MIT Licence covers it.
+            </p>
+            <div className="footer__links">
+              <a className="footer__link" href="#top">Top</a>
+              <a className="footer__link" href="#sheet">The sheet</a>
+              <button className="footer__link" type="button" onClick={() => setIsInfoVisible(true)}>Formula</button>
+              <a className="footer__link" href="https://github.com/NiloyTheSpd" rel="noreferrer noopener">Source</a>
             </div>
-         </div>
+          </div>
+        </div>
+      </footer>
+
+      {isInfoVisible && (
+        <div
+          className="modal"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="formula-title"
+          onClick={() => setIsInfoVisible(false)}
+        >
+          <div className="modal__panel" onClick={(e) => e.stopPropagation()}>
+            <h2 className="modal__title" id="formula-title">Calculation formula</h2>
+            <div className="modal__body">
+              <ol>
+                <li><strong>Best CT total.</strong> The sum of your two highest class test scores.</li>
+                <li><strong>CT contribution.</strong> The best CT total, weighted by 1.5 outside GEBS-101.</li>
+                <li><strong>Achieved marks.</strong> CT contribution plus mid term, attendance and class performance.</li>
+                <li>
+                  <strong>Target marks.</strong> The semester total times the grade percentage, so an A at
+                  {' '}{GRADE_THRESHOLDS['A'].percentage * 100}% of {courseConfig.totalMarks} marks.
+                </li>
+                <li><strong>Required for the Final.</strong> Target marks minus achieved marks, rounded up.</li>
+              </ol>
+              <table className="modal__grades">
+                <thead>
+                  <tr>
+                    <th scope="col">Grade</th>
+                    <th scope="col">From</th>
+                    <th scope="col">CGPA</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {GRADE_ORDER.map((grade) => (
+                    <tr key={grade}>
+                      <td>{grade}</td>
+                      <td className="table__num">{GRADE_THRESHOLDS[grade].percentage * 100}%</td>
+                      <td className="table__num">{GRADE_THRESHOLDS[grade].gradePoints.toFixed(2)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <button className="btn btn--volt modal__close" type="button" onClick={() => setIsInfoVisible(false)}>Close</button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
 }
 
-function SimpleSelect({ value, onChange, options, ariaLabel }){
+function SimpleSelect({ id, value, onChange, options, ariaLabel }) {
   const [open, setOpen] = useState(false);
   const [highlight, setHighlight] = useState(0);
   const ref = useRef(null);
 
   useEffect(() => {
-    if(value === '' ) setHighlight(0);
+    if (value === '') setHighlight(0);
     else {
       const idx = options.findIndex(o => o.value === value);
-      if(idx >= 0) setHighlight(idx);
+      if (idx >= 0) setHighlight(idx);
     }
   }, [value, options]);
 
   useEffect(() => {
-    function onDoc(e){ if(open && !ref.current?.contains(e.target)) setOpen(false); }
+    function onDoc(e) { if (open && !ref.current?.contains(e.target)) setOpen(false); }
     document.addEventListener('mousedown', onDoc);
     return () => document.removeEventListener('mousedown', onDoc);
   }, [open]);
@@ -348,24 +580,49 @@ function SimpleSelect({ value, onChange, options, ariaLabel }){
   const toggle = () => setOpen(s => !s);
 
   const handleKey = (e) => {
-    if(e.key === 'ArrowDown'){ e.preventDefault(); setOpen(true); setHighlight(h => Math.min(h+1, options.length-1)); }
-    else if(e.key === 'ArrowUp'){ e.preventDefault(); setHighlight(h => Math.max(h-1, 0)); }
-    else if(e.key === 'Enter'){ e.preventDefault(); const sel = options[highlight]; if(sel) { onChange(sel.value); setOpen(false);} }
-    else if(e.key === 'Escape'){ setOpen(false); }
-  }
+    if (e.key === 'ArrowDown') { e.preventDefault(); setOpen(true); setHighlight(h => Math.min(h + 1, options.length - 1)); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); setOpen(true); setHighlight(h => Math.max(h - 1, 0)); }
+    else if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      // a closed list opens on Enter or Space; an open one commits the highlight
+      if (!open) { setOpen(true); return; }
+      const sel = options[highlight];
+      if (sel) { onChange(sel.value); setOpen(false); }
+    }
+    else if (e.key === 'Escape') { setOpen(false); }
+  };
 
   return (
-    <div className="custom-select" ref={ref}>
-      <button aria-label={ariaLabel} onClick={toggle} onKeyDown={handleKey} className="glass-input custom-select-trigger">
+    <div className="select" ref={ref}>
+      <button
+        id={id}
+        type="button"
+        aria-label={ariaLabel}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        onClick={toggle}
+        onKeyDown={handleKey}
+        className="select__trigger"
+      >
         <span>{(options.find(o => o.value === value) || options[0]).label}</span>
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 7l4 4 4-4" stroke="#0f172a" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        <svg className="select__chevron" width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M6 7l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
       </button>
       {open && (
-        <div role="listbox" className="custom-select-list" tabIndex={-1}>
+        <div role="listbox" aria-label={ariaLabel} tabIndex={-1} className="select__list">
           {options.map((opt, i) => (
-            <div key={opt.value+i} role="option" aria-selected={opt.value === value} className="custom-select-item" onClick={() => { onChange(opt.value); setOpen(false); }} onMouseEnter={() => setHighlight(i)}>
+            <button
+              key={opt.value + i}
+              type="button"
+              role="option"
+              aria-selected={opt.value === value}
+              className="select__option"
+              onClick={() => { onChange(opt.value); setOpen(false); }}
+              onMouseEnter={() => setHighlight(i)}
+            >
               {opt.label}
-            </div>
+            </button>
           ))}
         </div>
       )}
