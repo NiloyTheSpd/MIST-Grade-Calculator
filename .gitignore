@@ -1,1 +1,5 @@
 node_modules
+
+# pnpm is the package manager for this project (Vercel installs with pnpm).
+# npm's lockfile would conflict with pnpm-lock.yaml, so keep it out of the repo.
+package-lock.json
