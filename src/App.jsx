@@ -495,9 +495,6 @@ export default function App() {
           <span className="footer__mark">MIST Grade Calculator</span>
           <div className="footer__colophon">
             <p>
-              Best two class tests count, weighted by 1.5 outside GEBS-101.
-            </p>
-            <p>
               Built by NiloyTheSpd. The MIT Licence covers it.
             </p>
             <div className="footer__links">
