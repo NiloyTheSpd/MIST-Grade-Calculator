@@ -1,5 +1,70 @@
 [
  {
+  "shape": "Story (sticky tower beside four chapters)",
+  "theme": "custom (by request: the user supplied the navy/lime design)",
+  "axes": [
+   "dark",
+   "display-condensed",
+   "chromatic-volt"
+  ],
+  "hero": "Stage, split copy and sheet",
+  "nav": "slab bar with a live status chip and a scroll progress bar",
+  "footer": "mast with the wordmark over the links",
+  "imagery": "the site own two campus photographs: night in the hero, day at the close",
+  "photos": [
+   "campus-night",
+   "campus-day"
+  ],
+  "entry": "Re-imagine MIST Grade Calculator in the user own direction: deep navy ground, one lime signal, a sticky tower holding the number the reader is working towards beside four chapters that scroll past it",
+  "signature": "the tower, one lime number held beside the chapters",
+  "sections": [
+   "Hero (the night campus and the number)",
+   "The semester sheet",
+   "Six marks on the sheet (the tower and four chapters)",
+   "Two credits, or three",
+   "What each grade takes",
+   "MIST at the hour the semester ends",
+   "Footer"
+  ],
+  "waived": [],
+  "prompt": "meanwhile pls re-imagine the website like this: the supplied dark navy and lime HTML",
+  "date": "2026-10-25",
+  "mode": "build",
+  "fingerprint": "mist-grade-calculator-story-7b31c0de"
+ },
+ {
+  "shape": "Story (sticky tower beside four chapters)",
+  "theme": "custom (by request: the user supplied the navy/lime design)",
+  "axes": [
+   "dark",
+   "display-condensed",
+   "chromatic-volt"
+  ],
+  "hero": "Stage, split copy and sheet",
+  "nav": "slab bar with a live status chip and a scroll progress bar",
+  "footer": "mast with the wordmark over the links",
+  "imagery": "the site own two campus photographs: night in the hero, day at the close",
+  "photos": [
+   "campus-night",
+   "campus-day"
+  ],
+  "entry": "Re-imagine MIST Grade Calculator in the user own direction: deep navy ground, one lime signal, a sticky tower holding the number the reader is working towards beside four chapters that scroll past it",
+  "signature": "the tower, one lime number held beside the chapters",
+  "sections": [
+   "Hero (the night campus and the number)",
+   "The semester sheet",
+   "Six marks on the sheet (the tower and four chapters)",
+   "Two credits, or three",
+   "What each grade takes",
+   "MIST at the hour the semester ends",
+   "Footer"
+  ],
+  "waived": [],
+  "prompt": "meanwhile pls re-imagine the website like this: the supplied dark navy and lime HTML",
+  "date": "2026-10-25",
+  "mode": "build"
+ },
+ {
   "shape": "Workbench",
   "theme": "Sport",
   "axes": [
