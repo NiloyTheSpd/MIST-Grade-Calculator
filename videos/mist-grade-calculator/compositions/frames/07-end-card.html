@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>07 — The end card</title>
+  </head>
+  <body>
+    <template id="frame-07-end-card">
+      <style>
+/* Ink Ledger — the film's shared base. Every frame inlines this.
+   The palette, the three faces and the ruled lines are the site's own. */
+
+@font-face {
+  font-family: 'Saira Condensed';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('assets/fonts/saira-condensed-800-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Saira Condensed';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('assets/fonts/saira-condensed-800-latin-ext.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0323, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* The site's own fallback stack names Arial Narrow. It is a system face, so
+   it is declared local rather than shipped. */
+@font-face {
+  font-family: 'Arial Narrow';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: local('Arial Narrow');
+}
+
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/figtree-var-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/figtree-var-latin-ext.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0323, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/jetbrains-mono-400-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/jetbrains-mono-400-latin-ext.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0323, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+#root {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  container-type: size;
+  background-color: #050a30;
+  font-family: 'Figtree', system-ui, sans-serif;
+  color: #f2f5ff;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The site's own ledger texture: hairline rules, not a graph grid. */
+#root .ground {
+  position: absolute;
+  inset: 0;
+  background-color: #050a30;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+  background-size: 96px 96px;
+}
+
+#root .scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+#root .stage {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+/* The one lime element in a frame. A fill, never a stroke, never a glow. */
+#root .volt-fill {
+  background-color: #c8e91c;
+  color: #050a30;
+}
+
+#root .mono {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The film's chrome: the wordmark, the catalogue line. It is quiet, but it
+   still has to clear 3:1 on the ink ground, so it sits at 42%. */
+#root .chrome {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+#root .display {
+  font-family: 'Saira Condensed', 'Arial Narrow', sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+}
+
+
+        /* ── The lens ────────────────────────────────────────────────────
+           One static perspective wrapper. `perspective` is set once and
+           never tweened — the lens does not warp, the camera moves. */
+        #root .stage {
+          position: absolute;
+          inset: 0;
+          perspective: 1200px;
+          perspective-origin: 50% 46%;
+          overflow: hidden;
+          background-color: #050a30;
+        }
+
+        /* The world: preserve-3d, laid out at 1x. The camera flies by
+           tweening THIS element's pose. It must stay clean — no filter,
+           no opacity, no overflow — or every translateZ collapses.
+
+           The origin sits on the closing card's own focal point (the
+           lower-left, where the wordmark is written) so the push moves
+           TOWARD the type instead of sliding it off the frame. */
+        #root .world {
+          position: absolute;
+          inset: 0;
+          transform-style: preserve-3d;
+          transform-origin: 26% 72%;
+          will-change: transform;
+        }
+
+        /* ── The far plane: the campus photograph ──────────────────────
+           The photograph is bigger than its crop window on purpose — it
+           is a window onto a wall, not a fitted image. The overflow is
+           marked as intended. */
+        #root .photo {
+          position: absolute;
+          inset: 0;
+          overflow: hidden;
+          transform-style: preserve-3d;
+        }
+
+        #root .photo img {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          width: 1920px;
+          height: 2078px;
+          /* The centring is written as GSAP's own xPercent/yPercent so
+             the push-in tween composes with it. */
+          transform: translate(-50%, -50%);
+          object-fit: cover;
+          user-select: none;
+          -webkit-user-drag: none;
+          /* The depth-of-field channel: px of blur, read by the filter.
+             The photograph sits on the far plane and is the only thing
+             allowed to go soft — the card in front of it stays sharp. */
+          --dof: 0px;
+          filter: blur(var(--dof));
+          will-change: transform, filter;
+        }
+
+        /* The ink scrim, so the type sits on the ground the site uses.
+           The night photograph is already dark; the scrim only has to
+           hold the type off it, not hide the campus behind it. */
+        #root .scrim {
+          position: absolute;
+          inset: 0;
+          background-color: rgba(5, 10, 48, 0.52);
+        }
+
+        #root .scrim--band {
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          height: 720px;
+          background: linear-gradient(
+            to top,
+            rgba(5, 10, 48, 0.95) 0%,
+            rgba(5, 10, 48, 0.72) 46%,
+            rgba(5, 10, 48, 0) 100%
+          );
+        }
+
+        /* ── The near plane: the card ───────────────────────────────────
+           The type sits on its own plane in front of the photograph, so
+           the camera's travel parallaxes the two against each other. */
+        #root .card {
+          position: absolute;
+          inset: 0;
+          transform-style: preserve-3d;
+        }
+
+        /* The bloom's backdrop. A soft radial volt halo behind the
+           wordmark — the address stays the only lime *element*; this is
+           light on the ground, not a second signal.
+
+           It is sized and centred on the wordmark's own box so the wash
+           lands ON the glyphs, not beside them. The core is deliberately
+           weak: the halo has to read as light falling on the type, and
+           a bright core would outshine the paper face and read as a
+           second lime element. */
+        #root .glow {
+          position: absolute;
+          left: 40px;
+          bottom: 288px;
+          width: 1240px;
+          height: 280px;
+          z-index: 0;
+          pointer-events: none;
+          transform-origin: 50% 50%;
+          opacity: 0;
+          background-image: radial-gradient(
+            ellipse 52% 62% at 42% 50%,
+            rgba(200, 233, 28, 0.42) 0%,
+            rgba(159, 189, 14, 0.22) 44%,
+            rgba(159, 189, 14, 0) 78%
+          );
+          will-change: transform, opacity;
+        }
+
+        /* The wordmark as a depth stack: the paper face in front and
+           three translucent plates behind it, offset a couple of pixels
+           each. The offsets imply light from the upper-left. */
+        #root .mark-stack {
+          position: absolute;
+          left: 96px;
+          bottom: 348px;
+          z-index: 1;
+          pointer-events: none;
+        }
+
+        #root .mark {
+          font-family: 'Saira Condensed', 'Arial Narrow', sans-serif;
+          font-weight: 800;
+          font-size: 116px;
+          line-height: 0.9;
+          letter-spacing: -0.012em;
+          color: #f2f5ff;
+          text-transform: uppercase;
+          white-space: nowrap;
+          will-change: transform, opacity;
+        }
+
+        #root .mark.is-back {
+          position: absolute;
+          top: 0;
+          left: 0;
+          pointer-events: none;
+        }
+
+        #root .mark.is-front {
+          position: relative;
+          z-index: 3;
+        }
+
+        #root .rule {
+          position: absolute;
+          left: 96px;
+          bottom: 318px;
+          width: 1728px;
+          height: 1px;
+          z-index: 2;
+          background-color: rgba(255, 255, 255, 0.16);
+          transform-origin: 0 50%;
+          transform: scaleX(0);
+          will-change: transform;
+        }
+
+        #root .address {
+          position: absolute;
+          left: 96px;
+          bottom: 214px;
+          z-index: 2;
+          font-family: 'JetBrains Mono', ui-monospace, monospace;
+          font-size: 44px;
+          font-weight: 400;
+          letter-spacing: 0.02em;
+          color: #c8e91c;
+          opacity: 0;
+          will-change: transform, opacity;
+        }
+
+        #root .last {
+          position: absolute;
+          left: 96px;
+          bottom: 118px;
+          z-index: 2;
+          font-family: 'Figtree', system-ui, sans-serif;
+          font-size: 34px;
+          color: #a3abd3;
+          opacity: 0;
+          will-change: transform, opacity;
+        }
+
+        #root .frame {
+          position: absolute;
+          inset: 0;
+          z-index: 4;
+          border: 1px solid rgba(255, 255, 255, 0.09);
+        }
+
+      </style>
+
+      <div
+        id="root"
+        class="frame-root"
+        data-composition-id="07-end-card"
+        data-start="0"
+        data-width="1920"
+        data-height="1080"
+        data-duration="5"
+      >
+        <div class="clip" id="s07-scene" data-start="0" data-duration="5" data-track-index="0">
+          <div class="stage" id="s07-stage">
+            <div class="world" id="s07-world" data-layout-allow-overflow>
+              <div class="photo" id="s07-photo" data-layout-allow-overflow>
+                <img
+                  src="assets/photos/campus-night.jpg"
+                  width="960"
+                  height="1280"
+                  alt="The MIST campus at night: two tall blocks seen from below, a sky-bridge between them with a metal lattice, and the dusk sky beyond, with a cloud low over the horizon and the moon rising."
+                />
+              </div>
+              <div class="scrim"></div>
+              <div class="scrim--band" data-layout-allow-overflow></div>
+
+              <div class="card" id="s07-card">
+                <div class="glow" id="s07-glow"></div>
+                <div class="mark-stack" id="s07-stack" data-layout-allow-overlap>
+                  <div class="mark is-back" id="s07-mark-3" data-layout-allow-overlap>MIST Grade Calculator</div>
+                  <div class="mark is-back" id="s07-mark-2" data-layout-allow-overlap>MIST Grade Calculator</div>
+                  <div class="mark is-back" id="s07-mark-1" data-layout-allow-overlap>MIST Grade Calculator</div>
+                  <div class="mark is-front" id="s07-mark">MIST Grade Calculator</div>
+                </div>
+                <div class="rule" id="s07-rule"></div>
+                <div class="address" id="s07-address">mistgc.vercel.app</div>
+                <div class="last" id="s07-last">
+                  The sheet above is the part you can still change.
+                </div>
+              </div>
+
+              <div class="frame"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <script>
+        (() => {
+          const photo = document.querySelector("#s07-scene .photo img");
+          const world = document.getElementById("s07-world");
+          const card = document.getElementById("s07-card");
+          const glow = document.getElementById("s07-glow");
+          const rule = document.getElementById("s07-rule");
+          const address = document.getElementById("s07-address");
+          const last = document.getElementById("s07-last");
+
+          /* The film's frame rate is 60, so every frame-based timing below
+             is written as N / 60 seconds. */
+          const F = 1 / 60;
+
+          /* The depth stack: the paper face and the three plates behind
+             it. Back-to-front, so the front is painted last. */
+          const LAYERS = [
+            { el: document.getElementById("s07-mark-3"), offset: 3, alpha: 0.44 },
+            { el: document.getElementById("s07-mark-2"), offset: 2, alpha: 0.58 },
+            { el: document.getElementById("s07-mark-1"), offset: 1, alpha: 0.72 },
+            { el: document.getElementById("s07-mark"), offset: 0, alpha: 1 },
+          ];
+
+          /* The translucency lives in `color`, not in element opacity, so
+             the front face stays a clean paper plane and the plates read
+             as one extrusion rather than four fading copies. The alphas
+             are the shallowest the depth rule allows that still clear
+             3:1 on the ink ground — the plates are a shadow of the word,
+             never a second word. */
+          LAYERS.forEach((layer) => {
+            if (layer.offset === 0) return;
+            layer.el.style.color = "rgba(242, 245, 255, " + layer.alpha + ")";
+          });
+
+          const tl = gsap.timeline({ paused: true });
+
+          /* ─────────────────────────────────────────────────────────────
+             THE CAMERA.
+
+             The 3d-camera-flight rule composes every leg onto one camera
+             state object and writes it to the world from a single
+             onUpdate. Under a suppressed seek onUpdate never fires, so
+             the flight is re-expressed as DIRECT PROPERTY TWEENS on the
+             world element itself — rotationX, rotationY, z, scale, x, y.
+             Each leg states its own from-values, so a seek to any time
+             lands on the right pose.
+
+             Every fromTo after the first on a given target carries
+             immediateRender: false, written LITERALLY in the tween vars.
+             A tween that does not own the element at authoring time must
+             not paint its from-state at build time, or the element
+             renders in the wrong state at t=0. (The flag has to be
+             literal: spread into the vars, the static analyser cannot
+             see it and the baseline check fires.)
+
+             The move is three phases, not one linear push:
+               Leg 1 — the anticipation: the world starts wide and
+                       angled, the camera swings flat and dives in.
+               Leg 2 — the settle: the world comes to rest, the tilt
+                       resolving to a readable near-flat plane.
+               Leg 3 — the slow push: a long, gentle travel forward for
+                       the rest of the frame.
+             ───────────────────────────────────────────────────────────── */
+
+          /* LEG 1 — ANTICIPATION. The world starts pushed away and
+             canted, as if the camera has just come around a corner of
+             the campus. It swings flat and comes forward.
+
+             The origin is the card's focal point, so the scale reads as
+             a move TOWARD the closing line and the type stays in frame
+             for the whole flight. */
+          tl.fromTo(
+            world,
+            { rotationX: 6.5, rotationY: -8, z: -170, x: 34, y: 26, scale: 1.075 },
+            {
+              rotationX: 0.6,
+              rotationY: -1.1,
+              z: 0,
+              x: 0,
+              y: 0,
+              scale: 1.018,
+              duration: 54 * F,
+              ease: "power3.out",
+            },
+            0
+          );
+
+          /* LEG 2 — SETTLE. A short hold flat on the card, so the type
+             is read on a near-flat plane before the push resumes. */
+          tl.fromTo(
+            world,
+            { rotationX: 0.6, rotationY: -1.1, z: 0, x: 0, y: 0, scale: 1.018 },
+            {
+              rotationX: 0,
+              rotationY: 0,
+              z: 16,
+              x: -5,
+              y: 3,
+              scale: 1.026,
+              duration: 30 * F,
+              ease: "power2.inOut",
+              immediateRender: false,
+            },
+            54 * F
+          );
+
+          /* LEG 3 — THE SLOW PUSH. The long final travel, forward and a
+             touch further around, ending on the composed card. */
+          tl.fromTo(
+            world,
+            { rotationX: 0, rotationY: 0, z: 16, x: -5, y: 3, scale: 1.026 },
+            {
+              rotationX: -1.4,
+              rotationY: 1.2,
+              z: 62,
+              x: 8,
+              y: -6,
+              scale: 1.052,
+              duration: 216 * F,
+              ease: "power1.inOut",
+              immediateRender: false,
+            },
+            84 * F
+          );
+
+          /* ─────────────────────────────────────────────────────────────
+             THE PHOTOGRAPH.
+
+             The slow push on the photograph itself, kept: it runs under
+             the camera flight so the campus is never still. The crop is
+             authored larger than the window, so the push never exposes
+             an edge.
+
+             The depth-of-field channel rides the same element: the
+             photograph sits on the far plane and softens while the card
+             in front of it stays sharp. The blur is small — the campus
+             has to stay a photograph, not a smear.
+             ───────────────────────────────────────────────────────────── */
+          tl.fromTo(
+            photo,
+            { xPercent: -50, yPercent: -50, scale: 1.02 },
+            { xPercent: -50, yPercent: -50, scale: 1.07, duration: 300 * F, ease: "power1.out" },
+            0
+          );
+
+          /* The far plane comes into focus as the camera dives in, then
+             settles back to a gentle softness on the final push. It is
+             a rack, not a fade: the picture is never fully out of focus,
+             because the campus is the photograph the frame opens on —
+             the blur stays small enough that the towers still read. */
+          tl.fromTo(
+            photo,
+            { "--dof": "3.5px" },
+            { "--dof": "0px", duration: 48 * F, ease: "power2.out" },
+            6 * F
+          );
+          tl.fromTo(
+            photo,
+            { "--dof": "0px" },
+            {
+              "--dof": "2.4px",
+              duration: 150 * F,
+              ease: "power1.inOut",
+              immediateRender: false,
+            },
+            120 * F
+          );
+
+          /* The breathing on the photograph: a bounded sine yoyo, so the
+             frame is never dead still.
+
+             It rides `y`, NOT `scale`: the push above already owns the
+             scale channel for the whole five seconds, and two tweens
+             writing one property fight each other — the second wins and
+             the push is silently lost. A three-pixel float on the crop
+             is the same read on a photograph, on a channel nothing else
+             touches. */
+          tl.fromTo(
+            photo,
+            { y: 0 },
+            {
+              y: -3,
+              duration: 120 * F,
+              ease: "sine.inOut",
+              yoyo: true,
+              repeat: 1,
+              immediateRender: false,
+            },
+            60 * F
+          );
+
+          /* ─────────────────────────────────────────────────────────────
+             THE CARD.
+
+             The wordmark is carried in from the left on the site's own
+             line, as a stack: the plates behind arrive first and the
+             paper face lands last, so the extrusion builds forward.
+
+             The depth grows with the arrival. The rule's own recipe
+             interpolated a proxy and wrote the offsets in onUpdate —
+             that never fires on a seek, so each plate's x and y are
+             tweened directly from zero to the full offset instead.
+             ───────────────────────────────────────────────────────────── */
+          LAYERS.forEach((layer, i) => {
+            const delay = i * 2 * F;
+            const dur = 16 * F;
+
+            if (layer.offset === 0) {
+              /* The front face. */
+              tl.fromTo(
+                layer.el,
+                { opacity: 0, x: -48 },
+                { opacity: 1, x: 0, duration: 18 * F, ease: "power3.out" },
+                30 * F
+              );
+              return;
+            }
+
+            /* The plates behind: they arrive with the wordmark, offset a
+               couple of pixels down and right. The offset direction
+               implies light from the upper-left, and it stays inside the
+               1–3px band the depth rule allows — any more and it reads
+               as chromatic smearing rather than an extrusion. */
+            tl.fromTo(
+              layer.el,
+              { opacity: 0, x: -48, y: 0 },
+              {
+                opacity: 1,
+                x: layer.offset,
+                y: layer.offset,
+                duration: dur,
+                ease: "power3.out",
+                immediateRender: false,
+              },
+              30 * F + delay
+            );
+          });
+
+          /* The rule draws left to right. */
+          tl.fromTo(
+            rule,
+            { scaleX: 0 },
+            { scaleX: 1, duration: 14 * F, ease: "power3.out" },
+            42 * F
+          );
+
+          /* The address lands in volt, early enough to hold to the end.
+             It carries the one lime element in the frame. */
+          tl.fromTo(
+            address,
+            { opacity: 0, y: 16 },
+            { opacity: 1, y: 0, duration: 12 * F, ease: "power2.out" },
+            48 * F
+          );
+
+          /* The site's own last line holds for the film's final seconds. */
+          tl.fromTo(
+            last,
+            { opacity: 0, y: 12 },
+            { opacity: 1, y: 0, duration: 14 * F, ease: "power2.out" },
+            60 * F
+          );
+
+          /* ─────────────────────────────────────────────────────────────
+             THE BLOOM.
+
+             A soft radial volt halo behind the wordmark. It blooms in as
+             the card lands — the glow and the wordmark resolve as one
+             beat, never glow-then-card — and then holds with a bounded
+             breathe.
+
+             The rule's breathe drove a phase proxy from onUpdate; under
+             a suppressed seek that never runs, so the breathe is a
+             finite yoyo tween on opacity and scale instead. It rests
+             exactly where it bloomed, and it must not claim the element
+             at authoring time.
+             ───────────────────────────────────────────────────────────── */
+          tl.fromTo(
+            glow,
+            { opacity: 0, scale: 0.84 },
+            { opacity: 0.4, scale: 1, duration: 42 * F, ease: "power2.out" },
+            24 * F
+          );
+
+          tl.fromTo(
+            glow,
+            { opacity: 0.4, scale: 1 },
+            {
+              opacity: 0.32,
+              scale: 1.035,
+              duration: 105 * F,
+              ease: "sine.inOut",
+              yoyo: true,
+              repeat: 1,
+              immediateRender: false,
+            },
+            66 * F
+          );
+
+          /* The card's own settle: the near plane eases forward a touch
+             as the bloom lands, so the type is drawn to the eye. */
+          tl.fromTo(
+            card,
+            { z: -18 },
+            { z: 0, duration: 48 * F, ease: "power3.out", immediateRender: false },
+            18 * F
+          );
+
+          window.__timelines = window.__timelines || {};
+          window.__timelines["07-end-card"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

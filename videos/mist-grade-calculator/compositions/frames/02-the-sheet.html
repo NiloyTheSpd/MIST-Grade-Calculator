@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>02 — The sheet</title>
+  </head>
+  <body>
+    <template id="frame-02-the-sheet">
+      <style>
+/* Ink Ledger — the film's shared base. Every frame inlines this.
+   The palette, the three faces and the ruled lines are the site's own. */
+
+@font-face {
+  font-family: 'Saira Condensed';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('assets/fonts/saira-condensed-800-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Saira Condensed';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('assets/fonts/saira-condensed-800-latin-ext.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0323, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* The site's own fallback stack names Arial Narrow. It is a system face, so
+   it is declared local rather than shipped. */
+@font-face {
+  font-family: 'Arial Narrow';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: local('Arial Narrow');
+}
+
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/figtree-var-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/figtree-var-latin-ext.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0323, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/jetbrains-mono-400-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/jetbrains-mono-400-latin-ext.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0323, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+#root {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  container-type: size;
+  background-color: #050a30;
+  font-family: 'Figtree', system-ui, sans-serif;
+  color: #f2f5ff;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The site's own ledger texture: hairline rules, not a graph grid. */
+#root .ground {
+  position: absolute;
+  inset: 0;
+  background-color: #050a30;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+  background-size: 96px 96px;
+}
+
+#root .scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+#root .stage {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+/* The one lime element in a frame. A fill, never a stroke, never a glow. */
+#root .volt-fill {
+  background-color: #c8e91c;
+  color: #050a30;
+}
+
+#root .mono {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The film's chrome: the wordmark, the catalogue line. It is quiet, but it
+   still has to clear 3:1 on the ink ground, so it sits at 42%. */
+#root .chrome {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+#root .display {
+  font-family: 'Saira Condensed', 'Arial Narrow', sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+}
+
+
+        /* The site's own sheet, cropped to the card. Measured on
+           assets/photos/03-sheet.png (3840 x 2556, captured at 2x):
+             card          x 742..3097, y 538..2314
+             figures row   y 1914..2121
+           The plate is twice the size of the viewport it was captured in,
+           so it is drawn at half scale and every measurement below is in
+           the CSS pixels of the original page:
+             card          x 371..1548.5, y 269..1157
+             figures row   y 957..1060.5
+           The crop keeps the card's own edge. The volt "Reset all" button
+           sits at the card's foot, below the crop, so exactly one volt
+           element — the achieved-so-far cell — is on screen. */
+        #root .sheet {
+          position: absolute;
+          left: 371.5px;
+          top: 32px;
+          width: 1177px;
+          height: 955px;
+          overflow: hidden;
+          z-index: 1;
+          transform-origin: 50% 50%;
+          will-change: transform;
+        }
+
+        #root .sheet img {
+          position: absolute;
+          left: -371px;
+          top: -125px;
+          width: 1920px;
+          height: 1278px;
+          user-select: none;
+          -webkit-user-drag: none;
+        }
+
+        /* The camera's pivot sits high (26%) so that EVERY phase of the
+           multi-phase move keeps the whole sheet inside the frame: the
+           crop window runs y 32..987, and scaling about y 497 would
+           shear 24px off the plate's own headline at scale 1.12. About
+           y 281 the sheet is fully framed from 1.0 through 1.12. */
+        #root .camera {
+          position: absolute;
+          inset: 0;
+          transform-origin: 50% 26%;
+          will-change: transform;
+        }
+
+        /* The film's chrome, set in the left margin the card leaves. The
+           card runs x 371..1548, so the tag lives at x 96 and never
+           touches the card's own edge. It is a FOREGROUND plane: it
+           carries its own --dof so the focus falls off it as the camera
+           settles into the sheet. */
+        #root .tag {
+          --dof: 3px;
+          position: absolute;
+          left: 96px;
+          top: 50%;
+          transform: translateY(-50%) rotate(-90deg);
+          transform-origin: 50% 50%;
+          font-size: 28px;
+          white-space: nowrap;
+          filter: blur(var(--dof));
+          will-change: filter;
+        }
+
+        /* ── The bloom behind the sheet ──────────────────────────────────
+           A soft volt-deep halo that lives on the sheet's own plane, so
+           it swells with the crop instead of hanging in the void. It is
+           DARKER and more saturated than the lime cell it backs, and it
+           never reaches a lime opacity — it is atmosphere, not an
+           element.
+
+           The plate is opaque and covers the halo's core, so the
+           gradient is authored to fall off SLOWLY: the sheet's own edge
+           sits at roughly 60% of the gradient radius, and the visible
+           ring outside the sheet is where the bloom actually reads.
+           A tight falloff would put every bright pixel behind the
+           plate and the glow would never be seen. */
+        #root .bloom {
+          position: absolute;
+          left: 10px;
+          top: -340px;
+          width: 1900px;
+          height: 1700px;
+          z-index: 0;
+          opacity: 0;
+          transform-origin: 50% 50%;
+          will-change: transform, opacity;
+          background: radial-gradient(
+            ellipse 50% 50% at 50% 50%,
+            rgba(159, 189, 14, 0.5) 0%,
+            rgba(159, 189, 14, 0.47) 55%,
+            rgba(159, 189, 14, 0.38) 70%,
+            rgba(159, 189, 14, 0.24) 82%,
+            rgba(159, 189, 14, 0.1) 92%,
+            rgba(159, 189, 14, 0) 100%
+          );
+        }
+
+        /* ── The focus reticle ───────────────────────────────────────────
+           Four paper-white corner brackets that lock onto the sheet's
+           one volt cell, the "97.00 Achieved so far" figure. Measured on
+           the plate at camera scale 1.0 it sits at page x 680..766,
+           y 887..966; the sheet's own origin is x 371.5, y 32, so in the
+           crop window it is x 308.5..394.5, y 855..934. The brackets
+           stand off it by 10px. Paper, never volt — the sheet already
+           owns the lime. */
+        #root .reticle {
+          position: absolute;
+          left: 298.5px;
+          top: 845px;
+          width: 106px;
+          height: 99px;
+          z-index: 2;
+          pointer-events: none;
+        }
+
+        #root .reticle i {
+          position: absolute;
+          width: 26px;
+          height: 26px;
+          border-color: rgba(242, 245, 255, 0.92);
+          border-style: solid;
+          border-width: 0;
+          opacity: 0;
+          transform-origin: 50% 50%;
+          will-change: transform, opacity;
+        }
+
+        #root .reticle i:nth-child(1) {
+          left: 0;
+          top: 0;
+          border-left-width: 3px;
+          border-top-width: 3px;
+          transform-origin: 0 0;
+        }
+        #root .reticle i:nth-child(2) {
+          right: 0;
+          top: 0;
+          border-right-width: 3px;
+          border-top-width: 3px;
+          transform-origin: 100% 0;
+        }
+        #root .reticle i:nth-child(3) {
+          left: 0;
+          bottom: 0;
+          border-left-width: 3px;
+          border-bottom-width: 3px;
+          transform-origin: 0 100%;
+        }
+        #root .reticle i:nth-child(4) {
+          right: 0;
+          bottom: 0;
+          border-right-width: 3px;
+          border-bottom-width: 3px;
+          transform-origin: 100% 100%;
+        }
+
+        /* ── The settle sweep ────────────────────────────────────────────
+           One pass of a soft paper band travelling down the sheet as the
+           camera lands, so the reveal reads as a focus pull rather than
+           a cut. It lives inside the crop window and is clipped by it.
+           One pass only — a repeating sweep reads as a loader. */
+        #root .sweep {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 1177px;
+          height: 300px;
+          z-index: 2;
+          opacity: 0;
+          pointer-events: none;
+          will-change: transform, opacity;
+          background: linear-gradient(
+            to bottom,
+            rgba(242, 245, 255, 0) 0%,
+            rgba(242, 245, 255, 0.075) 42%,
+            rgba(242, 245, 255, 0.11) 52%,
+            rgba(242, 245, 255, 0.055) 62%,
+            rgba(242, 245, 255, 0) 100%
+          );
+        }
+
+      </style>
+
+      <div
+        id="root"
+        class="frame-root"
+        data-composition-id="02-the-sheet"
+        data-start="0"
+        data-width="1920"
+        data-height="1080"
+        data-duration="3.5"
+      >
+        <div class="scene">
+          <div
+            id="s02-camera"
+            class="camera clip"
+            data-start="0"
+            data-duration="3.5"
+            data-track-index="0"
+            data-layout-allow-overflow
+          >
+            <div class="bloom" id="s02-bloom"></div>
+            <div class="sheet" id="s02-sheet" data-layout-allow-overflow>
+              <img
+                src="assets/photos/03-sheet.png"
+                width="3840"
+                height="2556"
+                alt="The MIST Grade Calculator semester sheet on a navy ground: the semester sheet head, the 3 credit toggle, the target grade select reading A+ 4.00, the verdict band reading Aiming for A+ and 143, six ruled input rows for Class Test 1 to 3, Performance, Attendance and Mid Term, and a four-cell figures row where 97.00 Achieved so far is the volt cell."
+              />
+              <div class="sweep" id="s02-sweep"></div>
+              <div class="reticle" id="s02-reticle">
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tag chrome">MIST GRADE CALCULATOR</div>
+      </div>
+
+
+      <script>
+        (() => {
+          const camera = document.getElementById("s02-camera");
+          const sheet = document.getElementById("s02-sheet");
+          const bloom = document.getElementById("s02-bloom");
+          const sweep = document.getElementById("s02-sweep");
+          const reticle = document.getElementById("s02-reticle");
+          const tag = document.querySelector("#root .tag");
+          const corners = Array.from(reticle.querySelectorAll("i"));
+
+          const tl = gsap.timeline({ paused: true });
+
+          /* ── MULTI-PHASE CAMERA ─────────────────────────────────────────
+             The original shot was ONE linear pull-back, 1.55 → 1, and
+             that intent is kept: the frame still opens tight on the
+             crop. But a single ramp is inert, so the move becomes three
+             phases with the anticipation and the landing either side of
+             the reveal.
+
+             Every transform below is a TWEENED PROPERTY ON THE ELEMENT
+             ITSELF. The host renders this composition by seeking its
+             timeline with events suppressed, so onUpdate never fires —
+             the rule's proxy-writer (a drift onUpdate that composes
+             scale and translate into one style string) would render a
+             frozen camera. The drift is therefore its own tween on the
+             camera's x and y, and the phase scale is its own tween on
+             the camera's scale. GSAP merges the two into one transform.
+
+             The three phases are ONE keyframed tween rather than three
+             chained fromTo tweens: a single tween has one from-state
+             and one resting value, so a seek to any time — forwards or
+             backwards — resolves the scale from the same keyframe plan.
+
+             The pivot moved to 50% 26% (see the CSS) so that every
+             phase keeps the whole crop window on screen. */
+
+          /* Phase 0 — the pull-back itself, off the tight crop.
+             Phase 1 — the anticipation: settle back to neutral and let
+             the whole sheet arrive on screen.
+             Phase 2 — the slow further push that lands the shot. */
+          tl.fromTo(
+            camera,
+            { scale: 1.55 },
+            {
+              keyframes: [
+                { scale: 1.12, duration: 26 / 60, ease: "power2.inOut" },
+                { scale: 1, duration: 34 / 60, ease: "power3.out" },
+                { scale: 1, duration: 36 / 60, ease: "none" },
+                { scale: 1.06, duration: 72 / 60, ease: "power2.inOut" },
+              ],
+            },
+            0
+          );
+
+          /* The continuous micro-drift, as two bounded sine yoyos on the
+             camera's own x and y. The periods differ (1.4s against 1.8s)
+             so the pair traces a Lissajous rather than a diagonal, and
+             both end on zero. Bounded repeats, not an infinite loop. */
+          tl.to(
+            camera,
+            {
+              x: 8,
+              duration: 84 / 60,
+              ease: "sine.inOut",
+              yoyo: true,
+              repeat: 3,
+            },
+            0
+          );
+          tl.to(
+            camera,
+            {
+              y: -4,
+              duration: 108 / 60,
+              ease: "sine.inOut",
+              yoyo: true,
+              repeat: 2,
+            },
+            0
+          );
+
+          /* ── SPRING-POP ENTRANCE (the sheet itself) ───────────────────
+             The sheet is not merely revealed by the camera: it lands.
+             Scale 0.94 → 1 with a small back.out overshoot, so the card
+             is felt to be set down. The overshoot is kept tight
+             (back.out(1.4)) — this is the site's product, not a toy. */
+          tl.fromTo(
+            sheet,
+            { scale: 0.94 },
+            { scale: 1, duration: 30 / 60, ease: "back.out(1.4)" },
+            0
+          );
+
+          /* ── AMBIENT GLOW BLOOM ────────────────────────────────────────
+             A volt-deep halo on the sheet's own plane. It blooms IN as
+             the camera settles and LANDS at 1.0s — the exact frame the
+             camera's phase-1 settle completes — so glow and card resolve
+             as one beat rather than as two separate events. Peak opacity
+             0.26: well under the 0.45 ceiling, and never lime enough to
+             read as a second signal. */
+          tl.fromTo(
+            bloom,
+            { opacity: 0, scale: 0.82 },
+            { opacity: 0.26, scale: 1, duration: 50 / 60, ease: "power2.out" },
+            10 / 60
+          );
+
+          /* ── DEPTH OF FIELD ────────────────────────────────────────────
+             The plate is the focal plane and stays genuinely sharp. The
+             chrome on the other planes fall off: the tag in the left
+             margin is a near foreground element, so it is softest while
+             the camera is still travelling across it and comes to rest
+             at a light residual blur, dimmed so it recedes behind the
+             sheet. The --dof variable is tweened directly on the
+             timeline; the filter reads it, so the blur stays on the
+             seek clock. */
+          tl.fromTo(
+            tag,
+            { "--dof": "3px", opacity: 0.9 },
+            { "--dof": "0px", opacity: 0.72, duration: 54 / 60, ease: "power2.out" },
+            0
+          );
+
+          /* The focus reticle rakes into focus on the sheet's one volt
+             cell, the "97.00 Achieved so far" figure. Blur clears as it
+             arrives — the same rack, on the same plane as the figure it
+             is calling out. */
+          corners.forEach((corner, i) => {
+            tl.fromTo(
+              corner,
+              { opacity: 0, scale: 1.7, filter: "blur(6px)" },
+              {
+                opacity: 1,
+                scale: 1,
+                filter: "blur(0px)",
+                duration: 22 / 60,
+                ease: "power3.out",
+              },
+              54 / 60 + i * 0.04
+            );
+          });
+
+          /* ── THE SETTLE SWEEP ──────────────────────────────────────────
+             One pass of a soft band down the crop window, timed to the
+             camera's landing so the reveal reads as a focus pull. It
+             travels by transform, never by top, and it is one pass:
+             the band crosses in 1.1s while its opacity envelope opens
+             fast and closes slow. */
+          tl.fromTo(
+            sweep,
+            { opacity: 0 },
+            { opacity: 1, duration: 10 / 60, ease: "sine.out" },
+            54 / 60
+          );
+          tl.fromTo(
+            sweep,
+            { y: -300 },
+            { y: 955, duration: 66 / 60, ease: "none" },
+            54 / 60
+          );
+          tl.to(sweep, { opacity: 0, duration: 16 / 60, ease: "power1.in" }, 104 / 60);
+
+          window.__timelines = window.__timelines || {};
+          window.__timelines["02-the-sheet"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

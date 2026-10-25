@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>04 — The answer</title>
+  </head>
+  <body>
+    <template id="frame-04-the-answer">
+      <style>
+/* Ink Ledger — the film's shared base. Every frame inlines this.
+   The palette, the three faces and the ruled lines are the site's own. */
+
+@font-face {
+  font-family: 'Saira Condensed';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('assets/fonts/saira-condensed-800-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Saira Condensed';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('assets/fonts/saira-condensed-800-latin-ext.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0323, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* The site's own fallback stack names Arial Narrow. It is a system face, so
+   it is declared local rather than shipped. */
+@font-face {
+  font-family: 'Arial Narrow';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: local('Arial Narrow');
+}
+
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/figtree-var-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/figtree-var-latin-ext.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0323, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/jetbrains-mono-400-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/jetbrains-mono-400-latin-ext.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0323, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+#root {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  container-type: size;
+  background-color: #050a30;
+  font-family: 'Figtree', system-ui, sans-serif;
+  color: #f2f5ff;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The site's own ledger texture: hairline rules, not a graph grid. */
+#root .ground {
+  position: absolute;
+  inset: 0;
+  background-color: #050a30;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+  background-size: 96px 96px;
+}
+
+#root .scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+#root .stage {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+/* The one lime element in a frame. A fill, never a stroke, never a glow. */
+#root .volt-fill {
+  background-color: #c8e91c;
+  color: #050a30;
+}
+
+#root .mono {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The film's chrome: the wordmark, the catalogue line. It is quiet, but it
+   still has to clear 3:1 on the ink ground, so it sits at 42%. */
+#root .chrome {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+#root .display {
+  font-family: 'Saira Condensed', 'Arial Narrow', sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+}
+
+
+        #root .band {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 1920px;
+          height: 1080px;
+          background-color: #050a30;
+          overflow: hidden;
+        }
+
+        #root .band__card {
+          position: absolute;
+          left: 96px;
+          top: 150px;
+          width: 1728px;
+          height: 780px;
+          background-color: #0d1550;
+          border: 1px solid rgba(255, 255, 255, 0.16);
+        }
+
+        #root .band__bar {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 4px;
+          background-color: #c8e91c;
+        }
+
+        #root .band__label {
+          position: absolute;
+          left: 72px;
+          top: 92px;
+          font-family: 'Figtree', system-ui, sans-serif;
+          font-size: 30px;
+          color: #a3abd3;
+        }
+
+        #root .band__status {
+          position: absolute;
+          left: 72px;
+          top: 152px;
+          font-family: 'Saira Condensed', 'Arial Narrow', sans-serif;
+          font-weight: 800;
+          font-size: 92px;
+          line-height: 0.9;
+          color: #f2f5ff;
+          text-transform: uppercase;
+          opacity: 0;
+        }
+
+        #root .band__message {
+          position: absolute;
+          left: 72px;
+          top: 286px;
+          font-family: 'Figtree', system-ui, sans-serif;
+          font-size: 36px;
+          color: #f2f5ff;
+          opacity: 0;
+        }
+
+        /* The number's box. It is authored, not shrink-to-fit: the glyph
+           grows from one digit to three while the counter runs, and an
+           authored box keeps every depth layer registered to the same
+           right edge so the extrusion never drifts off the face. */
+        #root .band__figure-stack {
+          position: absolute;
+          right: 72px;
+          top: 92px;
+          width: 760px;
+          height: 396px;
+          z-index: 2;
+          transform-origin: 100% 50%;
+          will-change: transform, filter;
+        }
+
+        /* One layer of the depth stack. The front layer is the pure lime
+           face; the layers behind it are the extrusion. */
+        #root .band__figure-layer {
+          position: absolute;
+          right: 0;
+          top: 0;
+          width: 760px;
+          text-align: right;
+          font-family: 'Saira Condensed', 'Arial Narrow', sans-serif;
+          font-weight: 800;
+          font-size: 460px;
+          line-height: 0.86;
+          letter-spacing: -0.02em;
+          color: #c8e91c;
+          font-variant-numeric: tabular-nums;
+          white-space: nowrap;
+          will-change: transform, opacity;
+        }
+
+        #root .band__figure-layer.is-back {
+          z-index: 1;
+        }
+
+        #root .band__figure-layer.is-front {
+          z-index: 2;
+        }
+
+        /* The bloom's backdrop. It sits behind the number, never on it:
+           the lime stays a flat fill. It lives inside the stack so it
+           rides the number's own box — the wash lands on the glyphs,
+           not on the empty space beside them. */
+        #root .band__glow {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 760px;
+          height: 396px;
+          z-index: 0;
+          pointer-events: none;
+          transform-origin: 58% 50%;
+          opacity: 0;
+          background-image: radial-gradient(
+            ellipse 68% 72% at 58% 50%,
+            rgba(159, 189, 14, 0.72) 0%,
+            rgba(159, 189, 14, 0.24) 46%,
+            rgba(159, 189, 14, 0) 78%
+          );
+          will-change: transform, opacity;
+        }
+
+        #root .band__chrome {
+          position: absolute;
+          left: 96px;
+          bottom: 74px;
+          font-size: 28px;
+        }
+
+        #root .camera {
+          position: absolute;
+          inset: 0;
+          transform-origin: 76% 50%;
+          will-change: transform;
+        }
+
+      </style>
+
+      <div
+        id="root"
+        class="frame-root"
+        data-composition-id="04-the-answer"
+        data-start="0"
+        data-width="1920"
+        data-height="1080"
+        data-duration="4"
+      >
+        <div class="clip" id="s04-scene" data-start="0" data-duration="4" data-track-index="0">
+          <div class="stage" id="s04-camera">
+            <div class="band">
+              <div class="band__card" id="s04-card">
+                <div class="band__bar"></div>
+                <div class="band__label">The Final</div>
+                <div class="band__status" id="s04-status">Aiming for A+</div>
+                <div class="band__message" id="s04-message">
+                  You need 143 marks in the Final.
+                </div>
+                <div class="band__figure-stack" id="s04-stack">
+                  <div class="band__glow" id="s04-glow"></div>
+                  <div class="band__figure-layer is-back" id="s04-figure-4">0</div>
+                  <div class="band__figure-layer is-back" id="s04-figure-3">0</div>
+                  <div class="band__figure-layer is-back" id="s04-figure-2">0</div>
+                  <div class="band__figure-layer is-back" id="s04-figure-1">0</div>
+                  <div class="band__figure-layer is-front" id="s04-figure">0</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="band__chrome chrome">MIST GRADE CALCULATOR</div>
+      </div>
+
+
+      <script>
+        (() => {
+          const camera = document.getElementById("s04-camera");
+          const card = document.getElementById("s04-card");
+          const status = document.getElementById("s04-status");
+          const message = document.getElementById("s04-message");
+          const stack = document.getElementById("s04-stack");
+          const glow = document.getElementById("s04-glow");
+
+          /* The depth stack: the pure lime face and the four extrusion
+             layers behind it. Back-to-front, so the front is painted last.
+             The alphas step down but each one still clears 3:1 on the
+             navy ground — a layer too faint to read is not depth, it is
+             a smudge. */
+          const LAYERS = [
+            { el: document.getElementById("s04-figure-4"), offset: 9, alpha: 0.62 },
+            { el: document.getElementById("s04-figure-3"), offset: 7, alpha: 0.6 },
+            { el: document.getElementById("s04-figure-2"), offset: 5, alpha: 0.74 },
+            { el: document.getElementById("s04-figure-1"), offset: 3, alpha: 0.88 },
+            { el: document.getElementById("s04-figure"), offset: 0, alpha: 1 },
+          ];
+          const FRONT = LAYERS[LAYERS.length - 1].el;
+
+          /* The extrusion is a deeper lime than the face, never a more
+             saturated one — a colour fringe reads as a glitch, not depth.
+             The translucency lives in `color`, not in element opacity, so
+             the front layer's face stays crisp. */
+          LAYERS.forEach((layer, i) => {
+            if (i === LAYERS.length - 1) return;
+            layer.el.style.color = "rgba(159, 189, 14, " + layer.alpha + ")";
+            /* The layers overlap the face by design — that overlap IS
+               the extrusion. The audit needs to be told it is intended. */
+            layer.el.setAttribute("data-layout-allow-overlap", "true");
+          });
+
+          const tl = gsap.timeline({ paused: true });
+
+          /* The card springs in. A small overshoot — the surface has
+             weight, but it is not a toy. */
+          tl.fromTo(
+            card,
+            { scale: 0.96 },
+            { scale: 1, duration: 30 / 60, ease: "back.out(1.4)" },
+            0
+          );
+
+          /* The status arrives per word, blur only. */
+          tl.fromTo(
+            status,
+            { opacity: 0, filter: "blur(8px)" },
+            { opacity: 1, filter: "blur(0px)", duration: 20 / 60, ease: "power4.out" },
+            12 / 60
+          );
+
+          /* THE ANSWER. The number counts up to 143 and settles. It is a
+             textContent tween, not a callback: the host renders this
+             composition by seeking its timeline with events suppressed, so
+             onUpdate never fires on a seek. The GSAP `modifiers` hook IS a
+             modifier, not a callback, so it still runs on a seek — the
+             digits land. Every layer of the stack counts on the same
+             window and ease, so the extrusion never shows a stale number. */
+          const COUNT_AT = 24 / 60;
+          const COUNT_DUR = 48 / 60;
+          const COUNT_EASE = "power2.out";
+
+          LAYERS.forEach((layer) => {
+            tl.to(
+              layer.el,
+              {
+                textContent: "143",
+                duration: COUNT_DUR,
+                ease: COUNT_EASE,
+                modifiers: {
+                  textContent: (value) => String(Math.round(parseFloat(value)))
+                },
+              },
+              COUNT_AT
+            );
+          });
+
+          /* The counter grows as it counts — the same window and the same
+             ease as the digits, so the weight arrives with the value.
+             The size stays 460px; only the transform changes. */
+          tl.fromTo(
+            stack,
+            { scale: 0.62 },
+            { scale: 1, duration: COUNT_DUR, ease: COUNT_EASE },
+            COUNT_AT
+          );
+
+          /* Motion blur on the entrance. The smear peaks at peak speed
+             and resolves to nothing at the settle, so the answer snaps
+             sharp the instant it lands. It rides the counter's window and
+             decays on a slower curve, so the last wisp clears just after
+             the arrival. `filter` is tweened directly — a proxy writer
+             would never run under a suppressed seek. */
+          tl.fromTo(
+            stack,
+            { filter: "blur(16px)" },
+            { filter: "blur(0px)", duration: COUNT_DUR, ease: "power1.out" },
+            COUNT_AT
+          );
+
+          /* The depth grows as the number lands. The rule's own writer
+             interpolated a proxy and wrote the offsets in onUpdate — that
+             never fires on a seek, so each back layer's x and y are
+             tweened directly from 0 to the full offset instead. */
+          LAYERS.forEach((layer, i) => {
+            if (i === LAYERS.length - 1) return;
+            tl.fromTo(
+              layer.el,
+              { x: 0, y: 0, opacity: 0 },
+              {
+                x: layer.offset,
+                y: layer.offset,
+                opacity: 1,
+                duration: 36 / 60,
+                ease: "power3.out",
+              },
+              54 / 60
+            );
+          });
+
+          /* The bloom. A soft radial volt backdrop behind the number,
+             swelling in as the answer lands and holding. The lime face
+             itself stays a flat fill — the glow is a separate layer, not
+             a glow on the number. Peak opacity stays under the ceiling. */
+          tl.fromTo(
+            glow,
+            { opacity: 0, scale: 0.82 },
+            { opacity: 0.42, scale: 1, duration: 39 / 60, ease: "power2.out" },
+            21 / 60
+          );
+
+          /* A bounded breathe during the hold. The rule's version drove a
+             phase proxy from onUpdate; under a suppressed seek that never
+             runs, so the breathe is a finite yoyo tween on opacity —
+             deterministic, and it rests exactly where it bloomed. It must
+             not claim the element at authoring time: the bloom owns the
+             from-state. */
+          tl.fromTo(
+            glow,
+            { opacity: 0.42 },
+            {
+              opacity: 0.34,
+              duration: 90 / 60,
+              ease: "sine.inOut",
+              yoyo: true,
+              repeat: 1,
+              immediateRender: false,
+            },
+            60 / 60
+          );
+
+          /* The site's own sentence lands under it. */
+          tl.fromTo(
+            message,
+            { opacity: 0 },
+            { opacity: 1, duration: 20 / 60, ease: "power2.out" },
+            84 / 60
+          );
+
+          /* The camera. Three phases — an anticipation lean before the
+             answer, a settle, then the slow push that lands on the
+             number. The rule composed the scale and the drift in one
+             onUpdate writer; here the scale is tweened on the camera
+             itself and the drift is a separate bounded tween on x and y,
+             so both survive a suppressed seek.
+
+             Every phase states its own from-value, so a seek to any time
+             lands on the right scale. Only the first phase owns the
+             baseline; the later ones must not claim the element at
+             authoring time, or a seek before the first phase would show
+             the last phase's from-value instead of scale 1. */
+          tl.fromTo(
+            camera,
+            { scale: 1 },
+            { scale: 1.055, duration: 30 / 60, ease: "power2.inOut" },
+            0
+          );
+          tl.fromTo(
+            camera,
+            { scale: 1.055 },
+            {
+              scale: 1.035,
+              duration: 24 / 60,
+              ease: "power2.inOut",
+              immediateRender: false,
+            },
+            30 / 60
+          );
+          tl.fromTo(
+            camera,
+            { scale: 1.035 },
+            {
+              scale: 1.12,
+              duration: 186 / 60,
+              ease: "power2.inOut",
+              immediateRender: false,
+            },
+            54 / 60
+          );
+
+          /* The micro-drift: a slow, bounded breath so the camera is never
+             dead still between phases. Sine in and out, yoyo, finite. */
+          tl.fromTo(
+            camera,
+            { x: 0, y: 0 },
+            {
+              x: 6,
+              y: -3,
+              duration: 114 / 60,
+              ease: "sine.inOut",
+              yoyo: true,
+              repeat: 1,
+              immediateRender: false,
+            },
+            0
+          );
+
+          window.__timelines = window.__timelines || {};
+          window.__timelines["04-the-answer"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

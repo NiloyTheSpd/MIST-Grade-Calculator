@@ -1,0 +1,179 @@
+{
+  "summary": {
+    "webAnimations": 4,
+    "cssDeclarations": 17,
+    "scrollTargets": 0,
+    "cdpAnimations": 4,
+    "canvases": 0
+  },
+  "namedAnimations": [
+    "settle"
+  ],
+  "scrollTriggeredElements": 0,
+  "representativeAnimations": [
+    {
+      "type": "CSSAnimation",
+      "playState": "finished",
+      "animationName": "settle",
+      "targetSelector": "h1.hero__title.reveal",
+      "targetRect": {
+        "x": 360,
+        "y": 401.421875,
+        "width": 460,
+        "height": 171.34375,
+        "top": 401.421875,
+        "right": 820,
+        "bottom": 572.765625,
+        "left": 360
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "composite": "replace",
+          "transform": "translateY(8px)",
+          "opacity": "0",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "composite": "auto",
+          "transform": "none",
+          "opacity": "1",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 600,
+        "delay": 0,
+        "iterations": 1,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "finished",
+      "animationName": "settle",
+      "targetSelector": "p.hero__lead.reveal",
+      "targetRect": {
+        "x": 360,
+        "y": 596.765625,
+        "width": 442,
+        "height": 63.78125,
+        "top": 596.765625,
+        "right": 802,
+        "bottom": 660.546875,
+        "left": 360
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "composite": "replace",
+          "transform": "translateY(8px)",
+          "opacity": "0",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "composite": "auto",
+          "transform": "none",
+          "opacity": "1",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 600,
+        "delay": 80,
+        "iterations": 1,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "finished",
+      "animationName": "settle",
+      "targetSelector": "div.hero__actions.reveal",
+      "targetRect": {
+        "x": 360,
+        "y": 700.546875,
+        "width": 460,
+        "height": 48,
+        "top": 700.546875,
+        "right": 820,
+        "bottom": 748.546875,
+        "left": 360
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "composite": "replace",
+          "transform": "translateY(8px)",
+          "opacity": "0",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "composite": "auto",
+          "transform": "none",
+          "opacity": "1",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 600,
+        "delay": 160,
+        "iterations": 1,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "finished",
+      "animationName": "settle",
+      "targetSelector": "#sheet.hero__visual.reveal",
+      "targetRect": {
+        "x": 916,
+        "y": 160.265625,
+        "width": 644,
+        "height": 829.453125,
+        "top": 160.265625,
+        "right": 1560,
+        "bottom": 989.71875,
+        "left": 916
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "composite": "replace",
+          "transform": "translateY(8px)",
+          "opacity": "0",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "composite": "auto",
+          "transform": "none",
+          "opacity": "1",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 600,
+        "delay": 160,
+        "iterations": 1,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    }
+  ]
+}

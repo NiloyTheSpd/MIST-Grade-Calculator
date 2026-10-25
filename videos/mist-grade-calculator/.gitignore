@@ -1,0 +1,18 @@
+# Local tool environments and install artifacts
+.venv-bgm/
+node_modules/
+
+# Scratch output from the debugging probes
+scripts/_probe_generated.html
+hyperframe.runtime.iife.js
+.thumbnails/
+
+# HyperFrames run state and machine-local artifacts
+.hyperframes/artifacts/
+.hyperframes/video-state.json
+.hyperframes/video-state-lock/
+.hyperframes/render-outputs.json
+.hyperframes/render-outputs-lock/
+.hyperframes/preview/
+.waveform-cache/
+__site.html

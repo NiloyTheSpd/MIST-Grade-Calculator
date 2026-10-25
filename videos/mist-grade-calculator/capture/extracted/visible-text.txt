@@ -1,0 +1,93 @@
+[a] MIST Grade Calculator
+[a] The sheet
+[a] Weighting
+[h1] Your final, worked out
+[p] Enter your marks. The sheet says what the Final must be.
+[a] Fill the sheet
+[button] Read the formula
+[span] Semester sheet
+[label] Target grade
+[span] A+ (4.00)
+[label] Credit
+[span] Select Credit
+[span] Final
+[span] Not Possible
+[p] Cannot achieve "A+". You'd be short by 60 marks.
+[span] 240
+[label] Class Test 1
+[label] Class Test 2
+[label] Class Test 3
+[small] Best two count
+[label] Performance
+[label] Attendance
+[label] Mid Term
+[span] 240
+[span] Target marks
+[span] 0.00
+[span] Achieved so far
+[span] 300
+[span] Semester total
+[span] 180
+[span] Final maximum
+[button] Reset all
+[h2] Six marks on the sheet
+[p] The Final is what is left.
+[th] Component
+[th] Maximum
+[th] Counted
+[td] Class tests
+[td] 3 × 20
+[td] Best two count
+[td] Mid term
+[td] One sitting, marked whole
+[td] Attendance
+[td] Counted as earned
+[td] Performance
+[td] Counted as earned
+[td] Final
+[td] 180
+[td] What the sheet works out
+[p] The Final carries 180 of 300 marks. Everything before it is earned; the rest is the one exam left.
+[h2] Two credits, or three
+[p] The course you pick sets the weightings.
+[h3] 3 Credit
+[p] The general course.
+[span] Semester total
+[span] 300
+[span] CT weight
+[span] × 1.5
+[span] Mid term
+[span] Attendance
+[span] Performance
+[span] Final maximum
+[span] 180
+[h3] 2 Credit
+[p] GEBS-101: CT sum not weighted.
+[span] Semester total
+[span] 200
+[span] CT weight
+[span] × 1
+[span] Mid term
+[span] Attendance
+[span] Performance
+[span] Final maximum
+[span] 120
+[h2] What each grade takes
+[p] The share of the semester total, then the CGPA point.
+[span] Percentage of the semester total, then the CGPA point. F* is the floor: 0%, and no grade below it.
+[span] 4.00
+[span] 3.75
+[span] 3.50
+[span] 3.25
+[span] 3.00
+[span] 2.75
+[span] 2.50
+[span] 2.25
+[span] 2.00
+[span] 0.00
+[figcaption] The campus, at the hour the semester ends.
+[h2] MIST at the hour the semester ends
+[p] Tower 4, after the light goes. The sheet above is the part you can still change.
+[span] MIST Grade Calculator
+[p] Built by NiloyTheSpd. The MIT Licence covers it.
+[a] The sheet

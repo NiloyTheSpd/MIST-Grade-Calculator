@@ -1,0 +1,188 @@
+{
+  "files": [
+    {
+      "file": "EJRLQgErUN8XuHNEtX81i9TmEkrnBc1Q-K2fhC61HpnY.woff2",
+      "family": "Saira Condensed",
+      "rawFamily": "Saira Condensed ExtraBold",
+      "subfamily": "Regular",
+      "postscript": "SairaCondensed-ExtraBold",
+      "weight": 800,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "EJRLQgErUN8XuHNEtX81i9TmEkrnBc1Q-a2fhC61HpnY.woff2",
+      "family": "Saira Condensed",
+      "rawFamily": "Saira Condensed ExtraBold",
+      "subfamily": "Regular",
+      "postscript": "SairaCondensed-ExtraBold",
+      "weight": 800,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "EJRLQgErUN8XuHNEtX81i9TmEkrnBc1Q962fhC61Hg.woff2",
+      "family": "Saira Condensed",
+      "rawFamily": "Saira Condensed ExtraBold",
+      "subfamily": "Regular",
+      "postscript": "SairaCondensed-ExtraBold",
+      "weight": 800,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "i7dOIFdwYjGaAMFtZd_QA1ZVYFeQGQyUV3U.woff2",
+      "family": "Albert Sans",
+      "rawFamily": "Albert Sans",
+      "subfamily": "Regular",
+      "postscript": "AlbertSans-Regular",
+      "weight": 400,
+      "style": "normal",
+      "variationAxes": [
+        "wght"
+      ],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "i7dOIFdwYjGaAMFtZd_QA1ZbYFeQGQyU.woff2",
+      "family": "Albert Sans",
+      "rawFamily": "Albert Sans",
+      "subfamily": "Regular",
+      "postscript": "AlbertSans-Regular",
+      "weight": 400,
+      "style": "normal",
+      "variationAxes": [
+        "wght"
+      ],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8-qxTN1OVk6OThhvAWV8.woff2",
+      "family": "JetBrains Mono",
+      "rawFamily": "JetBrains Mono Medium",
+      "subfamily": "Regular",
+      "postscript": "JetBrainsMono-Medium",
+      "weight": 500,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8-qxTNFOVk6OThhvAWV8.woff2",
+      "family": "JetBrains Mono",
+      "rawFamily": "JetBrains Mono Medium",
+      "subfamily": "Regular",
+      "postscript": "JetBrainsMono-Medium",
+      "weight": 500,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8-qxTNVOVk6OThhvAWV8.woff2",
+      "family": "JetBrains Mono",
+      "rawFamily": "JetBrains Mono Medium",
+      "subfamily": "Regular",
+      "postscript": "JetBrainsMono-Medium",
+      "weight": 500,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8-qxTOVOVk6OThhvAWV8.woff2",
+      "family": "JetBrains Mono",
+      "rawFamily": "JetBrains Mono Medium",
+      "subfamily": "Regular",
+      "postscript": "JetBrainsMono-Medium",
+      "weight": 500,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8-qxTOlOVk6OThhvA.woff2",
+      "family": "JetBrains Mono",
+      "rawFamily": "JetBrains Mono Medium",
+      "subfamily": "Regular",
+      "postscript": "JetBrainsMono-Medium",
+      "weight": 500,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8-qxTPlOVk6OThhvAWV8.woff2",
+      "family": "JetBrains Mono",
+      "rawFamily": "JetBrains Mono Medium",
+      "subfamily": "Regular",
+      "postscript": "JetBrainsMono-Medium",
+      "weight": 500,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    }
+  ],
+  "families": [
+    {
+      "family": "Albert Sans",
+      "weights": [
+        400
+      ],
+      "variable": true,
+      "fileCount": 2,
+      "files": [
+        "i7dOIFdwYjGaAMFtZd_QA1ZVYFeQGQyUV3U.woff2",
+        "i7dOIFdwYjGaAMFtZd_QA1ZbYFeQGQyU.woff2"
+      ]
+    },
+    {
+      "family": "JetBrains Mono",
+      "weights": [
+        500
+      ],
+      "variable": false,
+      "fileCount": 6,
+      "files": [
+        "tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8-qxTN1OVk6OThhvAWV8.woff2",
+        "tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8-qxTNFOVk6OThhvAWV8.woff2",
+        "tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8-qxTNVOVk6OThhvAWV8.woff2",
+        "tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8-qxTOVOVk6OThhvAWV8.woff2",
+        "tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8-qxTOlOVk6OThhvA.woff2",
+        "tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8-qxTPlOVk6OThhvAWV8.woff2"
+      ]
+    },
+    {
+      "family": "Saira Condensed",
+      "weights": [
+        800
+      ],
+      "variable": false,
+      "fileCount": 3,
+      "files": [
+        "EJRLQgErUN8XuHNEtX81i9TmEkrnBc1Q-K2fhC61HpnY.woff2",
+        "EJRLQgErUN8XuHNEtX81i9TmEkrnBc1Q-a2fhC61HpnY.woff2",
+        "EJRLQgErUN8XuHNEtX81i9TmEkrnBc1Q962fhC61Hg.woff2"
+      ]
+    }
+  ],
+  "unidentified": [],
+  "meta": {
+    "generatedAt": "2026-10-25T16:51:17.611Z",
+    "tool": "fontkit"
+  }
+}

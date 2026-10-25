@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>01 — The ink band</title>
+  </head>
+  <body>
+    <template id="frame-01-ink-band">
+      <style>
+/* Ink Ledger — the film's shared base. Every frame inlines this.
+   The palette, the three faces and the ruled lines are the site's own. */
+
+@font-face {
+  font-family: 'Saira Condensed';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('assets/fonts/saira-condensed-800-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Saira Condensed';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('assets/fonts/saira-condensed-800-latin-ext.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0323, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* The site's own fallback stack names Arial Narrow. It is a system face, so
+   it is declared local rather than shipped. */
+@font-face {
+  font-family: 'Arial Narrow';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: local('Arial Narrow');
+}
+
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/figtree-var-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/figtree-var-latin-ext.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0323, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/jetbrains-mono-400-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/jetbrains-mono-400-latin-ext.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0323, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+#root {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  container-type: size;
+  background-color: #050a30;
+  font-family: 'Figtree', system-ui, sans-serif;
+  color: #f2f5ff;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The site's own ledger texture: hairline rules, not a graph grid. */
+#root .ground {
+  position: absolute;
+  inset: 0;
+  background-color: #050a30;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+  background-size: 96px 96px;
+}
+
+#root .scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+#root .stage {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+/* The one lime element in a frame. A fill, never a stroke, never a glow. */
+#root .volt-fill {
+  background-color: #c8e91c;
+  color: #050a30;
+}
+
+#root .mono {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The film's chrome: the wordmark, the catalogue line. It is quiet, but it
+   still has to clear 3:1 on the ink ground, so it sits at 42%. */
+#root .chrome {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+#root .display {
+  font-family: 'Saira Condensed', 'Arial Narrow', sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+}
+
+
+        /* The band is the site's own card: a raised navy rectangle with a
+           hairline edge and the lime top bar the site puts on its photo. */
+        #root .band {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 1920px;
+          height: 1080px;
+          background-color: #050a30;
+          overflow: hidden;
+        }
+
+        #root .band__card {
+          position: absolute;
+          left: 96px;
+          top: 150px;
+          width: 1728px;
+          height: 780px;
+          background-color: #0d1550;
+          border: 1px solid rgba(255, 255, 255, 0.16);
+        }
+
+        #root .band__bar {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 4px;
+          background-color: #c8e91c;
+          transform-origin: 0 50%;
+          transform: scaleX(0);
+        }
+
+        #root .band__label {
+          position: absolute;
+          left: 72px;
+          top: 92px;
+          font-family: 'Figtree', system-ui, sans-serif;
+          font-size: 30px;
+          font-weight: 400;
+          color: #a3abd3;
+          letter-spacing: 0;
+        }
+
+        #root .band__status {
+          position: absolute;
+          left: 72px;
+          top: 148px;
+          font-family: 'Saira Condensed', 'Arial Narrow', sans-serif;
+          font-weight: 800;
+          font-size: 84px;
+          line-height: 0.9;
+          letter-spacing: -0.005em;
+          color: #f2f5ff;
+          text-transform: uppercase;
+        }
+
+        #root .band__rule {
+          position: absolute;
+          left: 72px;
+          top: 264px;
+          width: 1584px;
+          height: 1px;
+          background-color: rgba(255, 255, 255, 0.16);
+          transform-origin: 0 50%;
+          transform: scaleX(0);
+        }
+
+        #root .band__message {
+          position: absolute;
+          left: 72px;
+          top: 296px;
+          font-family: 'Figtree', system-ui, sans-serif;
+          font-size: 34px;
+          font-weight: 400;
+          color: #a3abd3;
+          opacity: 0;
+        }
+
+        /* The hero figure: a five-layer depth stack. The front layer is
+           `position: relative` so it defines the stack's size; the four
+           back layers are absolute and carry their translucency in
+           `rgba()` color, never in element opacity, so the front stays
+           crisp. Offsets step (+2, +2) per layer: light from upper-left. */
+        #root .band__figure-stack {
+          position: absolute;
+          right: 72px;
+          top: 96px;
+          z-index: 3;
+        }
+
+        #root .band__figure {
+          font-family: 'Saira Condensed', 'Arial Narrow', sans-serif;
+          font-weight: 800;
+          font-size: 460px;
+          line-height: 0.86;
+          letter-spacing: -0.02em;
+          color: #f2f5ff;
+          font-variant-numeric: tabular-nums;
+          transform-origin: 100% 50%;
+          will-change: transform;
+        }
+
+        #root .band__figure.is-front {
+          position: relative;
+          z-index: 10;
+        }
+
+        #root .band__figure.is-back {
+          position: absolute;
+          top: 0;
+          right: 0;
+          pointer-events: none;
+        }
+
+        /* Back-layer translucency lives in `rgba()` color, stepping down
+           with depth. The step is steep and the deepest layer is very
+           faint: a long soft tail reads as a drop shadow, not as an
+           extrusion. */
+        #root .band__figure[data-depth="1"] { color: rgba(242, 245, 255, 0.5); }
+        #root .band__figure[data-depth="2"] { color: rgba(242, 245, 255, 0.3); }
+        #root .band__figure[data-depth="3"] { color: rgba(242, 245, 255, 0.15); }
+        #root .band__figure[data-depth="4"] { color: rgba(242, 245, 255, 0.06); }
+
+        /* The ambient bloom behind the hero: a soft radial halo on its
+           own layer so it can never occlude the type. */
+        #root .band__bloom {
+          position: absolute;
+          right: -260px;
+          top: -260px;
+          width: 1420px;
+          height: 1420px;
+          border-radius: 50%;
+          background-image: radial-gradient(
+            circle at 50% 50%,
+            rgba(120, 150, 255, 0.34) 0%,
+            rgba(90, 118, 235, 0.18) 34%,
+            rgba(50, 70, 170, 0.07) 58%,
+            rgba(5, 10, 48, 0) 76%
+          );
+          opacity: 0;
+          transform-origin: 50% 50%;
+          pointer-events: none;
+          z-index: 2;
+        }
+
+        /* The motion-blur ghosts: soft, text-free slabs of light behind
+           the figure, trailing back along the entry vector and
+           collapsing into the lead as it settles. */
+        #root .band__ghost {
+          position: absolute;
+          right: 72px;
+          top: 96px;
+          width: 470px;
+          height: 400px;
+          background-image: linear-gradient(
+            100deg,
+            rgba(242, 245, 255, 0) 0%,
+            rgba(242, 245, 255, 0.9) 58%,
+            rgba(242, 245, 255, 0) 100%
+          );
+          filter: blur(22px);
+          opacity: 0;
+          pointer-events: none;
+          transform-origin: 100% 50%;
+          z-index: 1;
+        }
+
+        #root .band__chrome {
+          position: absolute;
+          left: 96px;
+          bottom: 74px;
+          font-size: 28px;
+        }
+
+        /* The cursor: the site's paper-white arrow, square tail.
+           The wrapper owns the click dip; the arrow inside owns the
+           entrance, so the two never fight over `scale`. */
+        #root .cursor-dip {
+          position: absolute;
+          left: 1560px;
+          top: 900px;
+          width: 96px;
+          height: 96px;
+          z-index: 40;
+          pointer-events: none;
+          transform-origin: 50% 50%;
+          will-change: transform;
+        }
+
+        #root .cursor {
+          position: absolute;
+          inset: 0;
+          width: 96px;
+          height: 96px;
+          opacity: 0;
+          transform-origin: 50% 50%;
+        }
+
+        /* The click ripple: a ring that lives in the DOM from t=0 and
+           expands out of the cursor's click point. No conditional
+           rendering, no callbacks — scale and opacity only. */
+        #root .ripple {
+          position: absolute;
+          left: 1572px;
+          top: 908px;
+          width: 120px;
+          height: 120px;
+          margin-left: -60px;
+          margin-top: -60px;
+          border-radius: 50%;
+          border: 2px solid rgba(242, 245, 255, 0.7);
+          transform: scale(0);
+          opacity: 0;
+          pointer-events: none;
+          z-index: 30;
+        }
+
+      </style>
+
+      <div
+        id="root"
+        class="frame-root"
+        data-composition-id="01-ink-band"
+        data-start="0"
+        data-width="1920"
+        data-height="1080"
+        data-duration="3"
+      >
+        <div class="clip" id="s01-scene" data-start="0" data-duration="3" data-track-index="0">
+          <div class="stage" id="s01-stage">
+            <div class="band">
+              <div class="band__card">
+                <div class="band__bar" id="s01-bar"></div>
+                <div class="band__label">The Final</div>
+                <div class="band__status" id="s01-status">Aiming for A+</div>
+                <div class="band__rule" id="s01-rule"></div>
+                <div class="band__message" id="s01-message">
+                  You need 143 marks in the Final.
+                </div>
+                <div class="band__bloom" id="s01-bloom"></div>
+                <div class="band__ghost" id="s01-ghost-2" aria-hidden="true" data-layout-allow-overlap></div>
+                <div class="band__ghost" id="s01-ghost-1" aria-hidden="true" data-layout-allow-overlap></div>
+                <div class="band__figure-stack" id="s01-stack">
+                  <div class="band__figure is-back" id="s01-figure-4" data-depth="4" aria-hidden="true" data-layout-allow-overlap data-layout-ignore>0</div>
+                  <div class="band__figure is-back" id="s01-figure-3" data-depth="3" aria-hidden="true" data-layout-allow-overlap data-layout-ignore>0</div>
+                  <div class="band__figure is-back" id="s01-figure-2" data-depth="2" aria-hidden="true" data-layout-allow-overlap data-layout-ignore>0</div>
+                  <div class="band__figure is-back" id="s01-figure-1" data-depth="1" aria-hidden="true" data-layout-allow-overlap data-layout-ignore>0</div>
+                  <div class="band__figure is-front" id="s01-figure">0</div>
+                </div>
+              </div>
+            </div>
+            <div class="band__chrome chrome">MIST GRADE CALCULATOR</div>
+            <div class="ripple" id="s01-ripple-1"></div>
+            <div class="ripple" id="s01-ripple-2"></div>
+            <div class="cursor-dip" id="s01-cursor-dip">
+              <svg
+                class="cursor"
+                id="s01-cursor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path d="M3 2 L3 20 L8.5 15.5 L11.5 22 L15 20.5 L12 14 L19 14 Z" fill="#f2f5ff" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <script>
+        (() => {
+          const bar = document.getElementById("s01-bar");
+          const rule = document.getElementById("s01-rule");
+          const status = document.getElementById("s01-status");
+          const message = document.getElementById("s01-message");
+          const figure = document.getElementById("s01-figure");
+          const stack = document.getElementById("s01-stack");
+          const bloom = document.getElementById("s01-bloom");
+          const ghost1 = document.getElementById("s01-ghost-1");
+          const ghost2 = document.getElementById("s01-ghost-2");
+          const cursor = document.getElementById("s01-cursor");
+          const cursorDip = document.getElementById("s01-cursor-dip");
+          const ripple1 = document.getElementById("s01-ripple-1");
+          const ripple2 = document.getElementById("s01-ripple-2");
+
+          /* The four depth layers behind the front figure, back-most
+             first. Each back layer carries its translucency in `rgba()`
+             color, never in element opacity, so the front stays crisp. */
+          const backLayers = [
+            { el: document.getElementById("s01-figure-4"), depth: 4 },
+            { el: document.getElementById("s01-figure-3"), depth: 3 },
+            { el: document.getElementById("s01-figure-2"), depth: 2 },
+            { el: document.getElementById("s01-figure-1"), depth: 1 },
+          ];
+          const allLayers = [figure, ...backLayers.map((l) => l.el)];
+
+          const tl = gsap.timeline({ paused: true });
+
+          /* ── Timing grid ────────────────────────────────────────────────
+             The film runs at 60 fps, so every beat below is expressed in
+             60ths of a second. The frame COUNT of each existing beat is
+             unchanged from the 30 fps cut — only the grid it is written
+             on changed — so the pacing in seconds is identical. */
+
+          const FPS = 60;
+          const frames = (n) => n / FPS;
+
+          const BAR_DUR = frames(24); // 0.400 s
+          const RULE_AT = frames(12); // 0.200 s
+          const RULE_DUR = frames(24); // 0.400 s
+          const STATUS_AT = frames(18); // 0.300 s
+          const STATUS_DUR = frames(20); // 0.333 s
+
+          /* The hero beat: the count, the depth build and the bloom all
+             land together so they read as ONE arrival. */
+          const FIG_AT = frames(24); // 0.400 s
+          const FIG_DUR = frames(36); // 0.600 s
+          const FIG_EASE = "power2.out";
+
+          const MESSAGE_AT = frames(48); // 0.800 s
+          const MESSAGE_DUR = frames(20); // 0.333 s
+
+          const CURSOR_AT = frames(126); // 2.100 s
+          const CURSOR_DUR = frames(30); // 0.500 s
+          const CLICK_AT = frames(144); // 2.400 s
+
+          /* ── The band ────────────────────────────────────────────────
+             The lime bar draws itself across the top of the band. */
+          tl.fromTo(bar, { scaleX: 0 }, { scaleX: 1, duration: BAR_DUR, ease: "power4.out" }, 0);
+
+          /* The rule under the status draws itself. */
+          tl.fromTo(rule, { scaleX: 0 }, { scaleX: 1, duration: RULE_DUR, ease: "power4.out" }, RULE_AT);
+
+          /* The status arrives per word, blur only, no translate. */
+          tl.fromTo(
+            status,
+            { opacity: 0, filter: "blur(8px)" },
+            { opacity: 1, filter: "blur(0px)", duration: STATUS_DUR, ease: "power4.out" },
+            STATUS_AT
+          );
+
+          /* ── The ambient bloom (ambient-glow-bloom) ───────────────────
+             A soft radial halo on its own layer BEHIND the hero, so it
+             can never occlude the type. It blooms in and lands on the
+             hero's settle — glow and hero resolve as one beat. Peak
+             0.34, under the 0.45 ceiling. The breathe is a bounded
+             finite tween, not a loop. */
+          tl.fromTo(
+            bloom,
+            { opacity: 0, scale: 0.82 },
+            { opacity: 0.34, scale: 1, duration: frames(30), ease: "power2.out" },
+            FIG_AT
+          );
+
+          /* A single bounded pulse as the figure lands, then it holds.
+             The follow-on tweens carry `immediateRender: false` so they
+             do not paint their visible from-state at build time — under
+             a suppressed seek the bloom must still be dark before the
+             hero beat begins. */
+          tl.fromTo(
+            bloom,
+            { opacity: 0.34, scale: 1 },
+            { opacity: 0.4, scale: 1.04, duration: frames(18), ease: "power2.out", immediateRender: false },
+            FIG_AT + FIG_DUR
+          );
+          tl.fromTo(
+            bloom,
+            { opacity: 0.4, scale: 1.04 },
+            { opacity: 0.34, scale: 1, duration: frames(42), ease: "power2.inOut", immediateRender: false },
+            FIG_AT + FIG_DUR + frames(18)
+          );
+
+          /* ── The motion-blur streak (motion-blur-streak) ──────────────
+             The streak rides the hero's entrance: a directional blur on
+             the stack that peaks with the fastest motion and resolves
+             to 0 on the same window and ease as the count, plus two
+             ghost slabs that trail back and collapse into the lead.
+             `filter` is a paint-only property, so it is safe to tween
+             directly under a suppressed seek — no proxy writer. */
+          tl.fromTo(
+            stack,
+            { filter: "blur(16px)" },
+            { filter: "blur(0px)", duration: FIG_DUR, ease: FIG_EASE, immediateRender: false },
+            FIG_AT
+          );
+
+          /* The ghost slabs only exist during the streak — they must be
+             invisible before it, so their visible from-state is held
+             back with `immediateRender: false`. */
+          tl.fromTo(
+            ghost1,
+            { opacity: 0.2, x: 96, scale: 1.16 },
+            { opacity: 0, x: 0, scale: 1, duration: frames(32), ease: "power3.out", immediateRender: false },
+            FIG_AT
+          );
+          tl.fromTo(
+            ghost2,
+            { opacity: 0.11, x: 186, scale: 1.3 },
+            { opacity: 0, x: 0, scale: 1, duration: frames(40), ease: "power3.out", immediateRender: false },
+            FIG_AT
+          );
+
+          /* ── The number counts up to the site's own figure and settles.
+             It is a textContent tween, not a callback: the host renders
+             this composition by seeking its timeline with events
+             suppressed, so onUpdate never fires on a seek. The
+             `modifiers` block is a modifier, not a callback, so it
+             still runs on every seek. All five depth layers count
+             together so the stack stays a single object. */
+          allLayers.forEach((el) => {
+            tl.to(
+              el,
+              {
+                textContent: "143",
+                duration: FIG_DUR,
+                ease: FIG_EASE,
+                modifiers: {
+                  textContent: (value) => String(Math.round(parseFloat(value)))
+                },
+              },
+              FIG_AT
+            );
+          });
+
+          /* ── The counter grows in scale as it counts
+             (counting-dynamic-scale). The scale tween shares the
+             count's EXACT duration and ease, and grows in place from
+             the figure's right edge. */
+          allLayers.forEach((el) => {
+            tl.fromTo(el, { scale: 0.62 }, { scale: 1, duration: FIG_DUR, ease: FIG_EASE }, FIG_AT);
+          });
+
+          /* ── The 3D depth stack (3d-text-depth-layers) ───────────────
+             Each back layer travels from the lead's position out to its
+             own offset (+2, +2) per depth step — light from the upper
+             left — while its element opacity rises from 0 to 1. The
+             translucency itself lives in the layer's `rgba()` color,
+             so the front layer never dims. Offsets are tweened as
+             GSAP `x`/`y` transform props, NOT written from an onUpdate
+             writer: under a suppressed seek no callback fires, so the
+             offset has to be a tweened property value. */
+          backLayers.forEach(({ el, depth }) => {
+            const finalX = depth * 2;
+            const finalY = depth * 2;
+            tl.fromTo(
+              el,
+              { x: 0, y: 0, opacity: 0 },
+              { x: finalX, y: finalY, opacity: 1, duration: frames(30), ease: "power2.out" },
+              FIG_AT
+            );
+          });
+
+          /* The sentence comes in under it, early enough to be read at
+             pace before the frame cuts. */
+          tl.fromTo(
+            message,
+            { opacity: 0 },
+            { opacity: 1, duration: MESSAGE_DUR, ease: "power2.out" },
+            MESSAGE_AT
+          );
+
+          /* ── The cursor enters from the bottom right and grows to 5% of
+             the frame width, then holds over the first row. */
+          tl.fromTo(
+            cursor,
+            { opacity: 0, x: 300, y: 300, scale: 0.2 },
+            { opacity: 1, x: 0, y: 0, scale: 1, duration: CURSOR_DUR, ease: "power3.out" },
+            CURSOR_AT
+          );
+
+          /* ── The click (cursor-click-ripple) ──────────────────────────
+             The cursor presses down and releases. The dip lives on a
+             WRAPPER so it never contends with the entrance tween for
+             the arrow's own `scale`. */
+          tl.fromTo(
+            cursorDip,
+            { scale: 1 },
+            { scale: 0.82, duration: frames(7), ease: "power2.in" },
+            CLICK_AT
+          );
+          tl.fromTo(
+            cursorDip,
+            { scale: 0.82 },
+            { scale: 1, duration: frames(14), ease: "back.out(2.2)", immediateRender: false },
+            CLICK_AT + frames(7)
+          );
+
+          /* The ripple rings live in the DOM from t=0 at opacity 0 and
+             scale 0. The attack and the decay are two `fromTo` tweens
+             with explicit from-states — no `tl.set`, no `onUpdate`,
+             both of which are dead under a suppressed seek. The decay
+             carries `immediateRender: false` so it never paints its
+             from-state at t=0. */
+          const RIPPLE_ATTACK = frames(7);
+          const RIPPLE_DECAY = frames(23);
+
+          [
+            { el: ripple1, at: CLICK_AT },
+            { el: ripple2, at: CLICK_AT + frames(5) },
+          ].forEach(({ el, at }) => {
+            tl.fromTo(
+              el,
+              { opacity: 0, scale: 0.28 },
+              { opacity: 0.66, scale: 1.15, duration: RIPPLE_ATTACK, ease: "power2.out" },
+              at
+            );
+            tl.fromTo(
+              el,
+              { opacity: 0.66, scale: 1.15 },
+              { opacity: 0, scale: 3.3, duration: RIPPLE_DECAY, ease: "power2.out", immediateRender: false },
+              at + RIPPLE_ATTACK
+            );
+          });
+
+          window.__timelines = window.__timelines || {};
+          window.__timelines["01-ink-band"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

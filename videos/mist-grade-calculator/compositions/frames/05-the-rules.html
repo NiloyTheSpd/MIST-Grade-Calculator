@@ -1,0 +1,695 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>05 — The rules</title>
+  </head>
+  <body>
+    <template id="frame-05-the-rules">
+      <style>
+/* Ink Ledger — the film's shared base. Every frame inlines this.
+   The palette, the three faces and the ruled lines are the site's own. */
+
+@font-face {
+  font-family: 'Saira Condensed';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('assets/fonts/saira-condensed-800-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB, U+02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Saira Condensed';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('assets/fonts/saira-condensed-800-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* The site's own fallback stack names Arial Narrow. It is a system face, so
+   it is declared local rather than shipped. */
+@font-face {
+  font-family: 'Arial Narrow';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: local('Arial Narrow');
+}
+
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/figtree-var-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB, U+02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/figtree-var-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/jetbrains-mono-400-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB, U+02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/jetbrains-mono-400-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+#root {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  container-type: size;
+  background-color: #050a30;
+  font-family: 'Figtree', system-ui, sans-serif;
+  color: #f2f5ff;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The site's own ledger texture: hairline rules, not a graph grid. */
+#root .ground {
+  position: absolute;
+  inset: 0;
+  background-color: #050a30;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+  background-size: 96px 96px;
+}
+
+#root .scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+#root .stage {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+/* The one lime element in a frame. A fill, never a stroke, never a glow. */
+#root .volt-fill {
+  background-color: #c8e91c;
+  color: #050a30;
+}
+
+#root .mono {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The film's chrome: the wordmark, the catalogue line. It is quiet, but it
+   still has to clear 3:1 on the ink ground, so it sits at 42%. */
+#root .chrome {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+#root .display {
+  font-family: 'Saira Condensed', 'Arial Narrow', sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+}
+
+
+        #root .ledger {
+          position: absolute;
+          left: 96px;
+          top: 168px;
+          width: 1728px;
+          background-color: #0d1550;
+          border: 1px solid rgba(255, 255, 255, 0.16);
+        }
+
+        /* The ledger's outer rule, drawn as a measured SVG stroke. It
+           sits on top of the sheet's own 1px border so the draw reads as
+           a pen tracing the frame of the sheet. The SVG is sized to the
+           sheet's real pixel box and its viewBox is set to the same
+           numbers, so the stroke is measured 1:1 and the dash pattern
+           is not stretched by a viewBox scale. */
+        #root .ledger__frame {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          pointer-events: none;
+          overflow: visible;
+          z-index: 3;
+        }
+
+        #root .ledger__frame-path {
+          fill: none;
+          stroke: rgba(255, 255, 255, 0.52);
+          stroke-width: 2;
+          stroke-linecap: butt;
+          stroke-linejoin: miter;
+        }
+
+        #root .ledger__head {
+          display: flex;
+          align-items: baseline;
+          justify-content: space-between;
+          padding: 34px 48px 24px;
+        }
+
+        #root .ledger__title {
+          font-family: 'Saira Condensed', 'Arial Narrow', sans-serif;
+          font-weight: 800;
+          font-size: 74px;
+          line-height: 0.9;
+          color: #f2f5ff;
+          text-transform: uppercase;
+        }
+
+        #root .ledger__sub {
+          font-family: 'JetBrains Mono', ui-monospace, monospace;
+          font-size: 30px;
+          line-height: 1.15;
+          font-weight: 400;
+          letter-spacing: 0.06em;
+          color: #a3abd3;
+        }
+
+        /* The row is a three-column ledger: the name, the bar track, the
+           figure. The track is authored wide and fixed so the fills grow
+           against a common ruler — the widths are proportional to the
+           maxima, so the Final bar is the dominant one. */
+        #root .row {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) 720px 92px;
+          align-items: center;
+          gap: 40px;
+          padding: 15px 48px 13px;
+          border-top: 1px solid rgba(255, 255, 255, 0.16);
+          position: relative;
+          overflow: hidden;
+          --dof: 0px;
+          filter: blur(var(--dof));
+          will-change: transform, filter, opacity;
+        }
+
+        #root .row__rule {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 1px;
+          background-color: rgba(255, 255, 255, 0.28);
+          transform-origin: 0 50%;
+          transform: scaleX(0);
+          will-change: transform;
+        }
+
+        #root .row__name {
+          font-family: 'Figtree', system-ui, sans-serif;
+          font-size: 38px;
+          line-height: 1.15;
+          font-weight: 400;
+          color: #f2f5ff;
+          opacity: 0;
+          white-space: nowrap;
+          will-change: transform, opacity;
+        }
+
+        #root .row__max {
+          font-family: 'JetBrains Mono', ui-monospace, monospace;
+          font-size: 34px;
+          line-height: 1.15;
+          font-weight: 400;
+          color: #a3abd3;
+          font-variant-numeric: tabular-nums;
+          text-align: right;
+          opacity: 0;
+          will-change: transform, opacity;
+        }
+
+        /* The fill's ruler. The track is the site's own muted rule; the
+           fill is a scaleX on a full-width child — never a width tween.
+           The track is dim so the empty part of the ruler reads as
+           measure, not as a void. */
+        #root .row__bar {
+          position: relative;
+          width: 100%;
+          height: 10px;
+          background-color: rgba(255, 255, 255, 0.09);
+          overflow: hidden;
+          opacity: 0;
+          will-change: transform, opacity;
+        }
+
+        #root .row__bar-fill {
+          width: 100%;
+          height: 100%;
+          background-color: #f2f5ff;
+          transform: scaleX(0);
+          transform-origin: left center;
+          will-change: transform;
+        }
+
+        /* The Final row is the heaviest rule on the sheet. Its bar is the
+           frame's one lime element: a fill, never a stroke, never a glow. */
+        #root .row--final {
+          border-top: 2px solid rgba(255, 255, 255, 0.28);
+        }
+
+        #root .row--final .row__name {
+          font-family: 'Saira Condensed', 'Arial Narrow', sans-serif;
+          font-weight: 800;
+          font-size: 52px;
+          line-height: 0.95;
+          text-transform: uppercase;
+          color: #f2f5ff;
+        }
+
+        #root .row--final .row__rule {
+          height: 2px;
+          background-color: rgba(255, 255, 255, 0.28);
+        }
+
+        #root .row--final .row__bar {
+          height: 14px;
+        }
+
+        #root .row--final .row__bar-fill {
+          background-color: #c8e91c;
+        }
+
+        #root .ledger__foot {
+          display: flex;
+          align-items: baseline;
+          justify-content: space-between;
+          padding: 20px 48px 24px;
+          border-top: 1px solid rgba(255, 255, 255, 0.16);
+        }
+
+        #root .ledger__foot-label {
+          font-family: 'Figtree', system-ui, sans-serif;
+          font-size: 32px;
+          line-height: 1.2;
+          color: #a3abd3;
+          opacity: 0;
+          will-change: transform, opacity;
+        }
+
+        /* The semester total. A fixed-width box so the count never
+           reflows the row as the digits change. */
+        #root .ledger__foot-value {
+          font-family: 'JetBrains Mono', ui-monospace, monospace;
+          font-size: 44px;
+          line-height: 1.2;
+          color: #f2f5ff;
+          font-variant-numeric: tabular-nums;
+          text-align: right;
+          opacity: 0;
+          transform-origin: 100% 50%;
+          will-change: transform, opacity;
+        }
+
+      </style>
+
+      <div
+        id="root"
+        class="frame-root"
+        data-composition-id="05-the-rules"
+        data-start="0"
+        data-width="1920"
+        data-height="1080"
+        data-duration="4.5"
+      >
+        <div class="clip" id="s05-scene" data-start="0" data-duration="4.5" data-track-index="0">
+          <div class="stage" id="s05-stage">
+            <div class="ledger" id="s05-ledger">
+              <div class="ledger__head">
+                <div class="ledger__title" id="s05-title">Six marks on the sheet</div>
+                <div class="ledger__sub">MAX</div>
+              </div>
+
+              <div class="row">
+                <div class="row__rule"></div>
+                <div class="row__name">Class Test 1</div>
+                <div class="row__bar"><div class="row__bar-fill"></div></div>
+                <div class="row__max">20</div>
+              </div>
+              <div class="row">
+                <div class="row__rule"></div>
+                <div class="row__name">Class Test 2</div>
+                <div class="row__bar"><div class="row__bar-fill"></div></div>
+                <div class="row__max">20</div>
+              </div>
+              <div class="row">
+                <div class="row__rule"></div>
+                <div class="row__name">Class Test 3</div>
+                <div class="row__bar"><div class="row__bar-fill"></div></div>
+                <div class="row__max">20</div>
+              </div>
+              <div class="row">
+                <div class="row__rule"></div>
+                <div class="row__name">Mid term</div>
+                <div class="row__bar"><div class="row__bar-fill"></div></div>
+                <div class="row__max">30</div>
+              </div>
+              <div class="row">
+                <div class="row__rule"></div>
+                <div class="row__name">Attendance</div>
+                <div class="row__bar"><div class="row__bar-fill"></div></div>
+                <div class="row__max">15</div>
+              </div>
+              <div class="row">
+                <div class="row__rule"></div>
+                <div class="row__name">Performance</div>
+                <div class="row__bar"><div class="row__bar-fill"></div></div>
+                <div class="row__max">15</div>
+              </div>
+              <div class="row row--final">
+                <div class="row__rule"></div>
+                <div class="row__name">Final</div>
+                <div class="row__bar"><div class="row__bar-fill"></div></div>
+                <div class="row__max">180</div>
+              </div>
+
+              <div class="ledger__foot">
+                <div class="ledger__foot-label" id="s05-foot-label">
+                  Semester total
+                </div>
+                <div class="ledger__foot-value" id="s05-foot-value">0</div>
+              </div>
+
+              <svg
+                class="ledger__frame"
+                id="s05-frame"
+                preserveAspectRatio="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  class="ledger__frame-path"
+                  id="s05-frame-path"
+                  d=""
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <script>
+        (() => {
+          const F = 1 / 60;
+
+          const title = document.getElementById("s05-title");
+          const ledger = document.getElementById("s05-ledger");
+          const frameSvg = document.getElementById("s05-frame");
+          const framePath = document.getElementById("s05-frame-path");
+          const rows = Array.from(document.querySelectorAll("#s05-scene .row"));
+          const footLabel = document.getElementById("s05-foot-label");
+          const footValue = document.getElementById("s05-foot-value");
+
+          /* The maxima, in the site's own order. The bar fills are
+             proportional to these — the Final bar is the full ruler and
+             everything else is its share of 180. */
+          const MAXIMA = [20, 20, 20, 30, 15, 15, 180];
+          const TOP_MAX = 180;
+
+          const tl = gsap.timeline({ paused: true });
+
+          /* ----------------------------------------------------------------
+             The sheet's outer rule, drawn.
+
+             The rule's own sample sets the dash pattern at setup from a
+             measured getTotalLength(), then tweens the dashoffset to 0.
+             That setup write is a plain DOM write at build time, not a
+             callback, so it survives a suppressed seek — only the tween
+             itself has to be on the timeline.
+
+             The path is authored against the sheet's real pixel box: the
+             SVG is stretched to the ledger and its viewBox is set to the
+             same measured numbers, so the stroke is measured 1:1 and the
+             dash pattern is never stretched by a viewBox scale. This is
+             a single-scene composition, so measuring the box at build
+             time is safe.
+             ---------------------------------------------------------------- */
+          const FRAME_AT = 4 * F;
+          const FRAME_DUR = 30 * F;
+
+          const ledgerBox = ledger.getBoundingClientRect();
+          const FRAME_W = Math.round(ledgerBox.width) || 1728;
+          const FRAME_H = Math.round(ledgerBox.height) || 736;
+
+          frameSvg.setAttribute("viewBox", "0 0 " + FRAME_W + " " + FRAME_H);
+          framePath.setAttribute(
+            "d",
+            "M 1 1 L " + (FRAME_W - 1) + " 1 L " + (FRAME_W - 1) + " " + (FRAME_H - 1) +
+              " L 1 " + (FRAME_H - 1) + " Z"
+          );
+
+          const frameLen = framePath.getTotalLength();
+          framePath.style.strokeDasharray = String(frameLen);
+          framePath.style.strokeDashoffset = String(frameLen);
+
+          tl.to(
+            framePath,
+            { strokeDashoffset: 0, duration: FRAME_DUR, ease: "power2.out" },
+            FRAME_AT
+          );
+
+          /* The title arrives per word, blur only, no translate. */
+          tl.fromTo(
+            title,
+            { opacity: 0, filter: "blur(10px)" },
+            { opacity: 1, filter: "blur(0px)", duration: 12 * F, ease: "power4.out" },
+            6 * F
+          );
+
+          /* ----------------------------------------------------------------
+             The waterfall.
+
+             Seven rows arrive as a cascade: each whipping up from below,
+             each starting before the previous has settled, so the sheet
+             fills as a wave rather than a queue. Travel and duration
+             vary by weight — the Final row is the anchor and travels
+             furthest — and the overlap shrinks across the cascade so the
+             last row snaps.
+
+             The rule's sample uses tl.set for the binary reveal. Under a
+             suppressed seek tl.set never fires, so the hidden state is
+             baked into the CSS and the reveal is a one-frame opacity
+             tween beside the y whip: 0 -> 1 in a single frame, a hard
+             cut, never a fade.
+             ---------------------------------------------------------------- */
+          const ROW_AT = 40 * F;
+          const ROW_STEP = 7 * F;
+
+          /* Travel per row. The anchor (Final) travels the furthest. */
+          const ROW_TRAVEL = [44, 42, 40, 46, 38, 36, 80];
+          const ROW_DUR = [6 * F, 6 * F, 6 * F, 7 * F, 5 * F, 5 * F, 10 * F];
+          /* The hairline draws across as the row lands. */
+          const RULE_DUR = [9 * F, 9 * F, 9 * F, 10 * F, 8 * F, 8 * F, 13 * F];
+          /* The fill grows to its share of the ruler as the row settles. */
+          const BAR_DUR = [16 * F, 16 * F, 16 * F, 18 * F, 14 * F, 14 * F, 24 * F];
+
+          rows.forEach((row, i) => {
+            const at = ROW_AT + i * ROW_STEP;
+            const rule = row.querySelector(".row__rule");
+            const name = row.querySelector(".row__name");
+            const max = row.querySelector(".row__max");
+            const bar = row.querySelector(".row__bar");
+            const fill = row.querySelector(".row__bar-fill");
+            const share = MAXIMA[i] / TOP_MAX;
+
+            /* The row's hairline draws left to right. */
+            tl.fromTo(
+              rule,
+              { scaleX: 0 },
+              { scaleX: 1, duration: RULE_DUR[i], ease: "power3.out" },
+              at
+            );
+
+            /* The binary reveal: one frame from nothing to opaque, so
+               the row snaps in and never fades on the way. */
+            tl.fromTo(
+              name,
+              { opacity: 0 },
+              { opacity: 1, duration: F, ease: "none" },
+              at
+            );
+            tl.fromTo(
+              max,
+              { opacity: 0 },
+              { opacity: 1, duration: F, ease: "none" },
+              at
+            );
+            tl.fromTo(
+              bar,
+              { opacity: 0 },
+              { opacity: 1, duration: F, ease: "none" },
+              at + 2 * F
+            );
+
+            /* The whip: the row comes up from below and lands hard. */
+            tl.fromTo(
+              row,
+              { y: ROW_TRAVEL[i] },
+              { y: 0, duration: ROW_DUR[i], ease: "power4.out" },
+              at
+            );
+
+            /* The fill grows to its share of the ruler. The bar track is
+               a fixed 720px and the fill is a full-width child scaled
+               on X — the widths are proportional to the maxima, so the
+               Final bar is the dominant one and the sheet reads as a
+               weight chart. */
+            tl.fromTo(
+              fill,
+              { scaleX: 0 },
+              { scaleX: share, duration: BAR_DUR[i], ease: "power3.out" },
+              at + 3 * F
+            );
+          });
+
+          /* ----------------------------------------------------------------
+             The focus falloff.
+
+             As the eye travels down the sheet, the rows already passed
+             drift out of focus — a soft blur and a slight dim — while the
+             row under the eye stays sharp. The blur rides a tweened
+             `--dof` custom property that the CSS reads through
+             filter: blur(var(--dof)), so it stays on the seek clock.
+
+             A row leaves focus when the NEXT row lands, not when it lands
+             itself: the focus travels with the cascade. The Final row is
+             the anchor and never leaves focus. The falloff is kept
+             deliberately small — a dim and a hair of blur, never enough
+             to lose a figure's legibility.
+
+             The tail then pulls the focus back, so the composed end frame
+             is the whole sheet, sharp and readable.
+             ---------------------------------------------------------------- */
+          const DOF_BLUR = 1.6;
+          const DOF_DIM = 0.82;
+          const DOF_DUR = 10 * F;
+
+          rows.forEach((row, i) => {
+            /* The last row is the anchor: it holds the focus to the end. */
+            if (i === rows.length - 1) return;
+            /* The row is passed when the row below it arrives. */
+            const passed = ROW_AT + (i + 1) * ROW_STEP;
+
+            tl.fromTo(
+              row,
+              { opacity: 1 },
+              { opacity: DOF_DIM, duration: DOF_DUR, ease: "power2.out" },
+              passed
+            );
+            tl.fromTo(
+              row,
+              { "--dof": "0px" },
+              { "--dof": DOF_BLUR + "px", duration: DOF_DUR, ease: "power2.out" },
+              passed
+            );
+          });
+
+          /* The tail: the focus comes back. Every row sharpens and
+             returns to full strength, so the frame ends composed. */
+          const REFOCUS_AT = 150 * F;
+          const REFOCUS_DUR = 24 * F;
+
+          rows.forEach((row, i) => {
+            if (i === rows.length - 1) return;
+            tl.fromTo(
+              row,
+              { "--dof": DOF_BLUR + "px" },
+              { "--dof": "0px", duration: REFOCUS_DUR, ease: "power2.inOut", immediateRender: false },
+              REFOCUS_AT
+            );
+            tl.fromTo(
+              row,
+              { opacity: DOF_DIM },
+              { opacity: 1, duration: REFOCUS_DUR, ease: "power2.inOut", immediateRender: false },
+              REFOCUS_AT
+            );
+          });
+
+          /* ----------------------------------------------------------------
+             The foot lands last: the semester total counts up to 300.
+
+             It is a textContent tween, not a callback: the host renders
+             this composition by seeking its timeline with events
+             suppressed, so onUpdate never fires on a seek. The GSAP
+             `modifiers` hook IS a modifier, not a callback, so it still
+             runs and the digits land.
+
+             The counter grows as it counts — the same window and the
+             same ease as the digits, so the weight arrives with the
+             value. The size stays 44px; only the transform changes.
+             ---------------------------------------------------------------- */
+          const COUNT_AT = 168 * F;
+          const COUNT_DUR = 48 * F;
+          const COUNT_EASE = "power2.out";
+
+          tl.fromTo(
+            footLabel,
+            { opacity: 0, y: 26 },
+            { opacity: 1, y: 0, duration: 12 * F, ease: "power4.out" },
+            COUNT_AT
+          );
+
+          tl.to(
+            footValue,
+            {
+              textContent: "300",
+              duration: COUNT_DUR,
+              ease: COUNT_EASE,
+              modifiers: {
+                textContent: (value) => String(Math.round(parseFloat(value)))
+              },
+            },
+            COUNT_AT
+          );
+
+          tl.fromTo(
+            footValue,
+            { scale: 0.62 },
+            { scale: 1, duration: COUNT_DUR, ease: COUNT_EASE },
+            COUNT_AT
+          );
+
+          /* The total's own rule, drawn on as the count peaks. */
+          tl.fromTo(
+            footValue,
+            { opacity: 0 },
+            { opacity: 1, duration: F, ease: "none" },
+            COUNT_AT
+          );
+
+          window.__timelines = window.__timelines || {};
+          window.__timelines["05-the-rules"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

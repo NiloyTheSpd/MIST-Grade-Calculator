@@ -1,0 +1,100 @@
+[
+  {
+    "frame": 3,
+    "file": "assets/sfx/field-1.wav",
+    "offset_s": 0.95,
+    "duration_s": 0.12,
+    "volume": 0.3
+  },
+  {
+    "frame": 3,
+    "file": "assets/sfx/field-2.wav",
+    "offset_s": 1.67,
+    "duration_s": 0.12,
+    "volume": 0.3
+  },
+  {
+    "frame": 3,
+    "file": "assets/sfx/field-3.wav",
+    "offset_s": 2.39,
+    "duration_s": 0.12,
+    "volume": 0.3
+  },
+  {
+    "frame": 3,
+    "file": "assets/sfx/field-4.wav",
+    "offset_s": 3.11,
+    "duration_s": 0.12,
+    "volume": 0.3
+  },
+  {
+    "frame": 3,
+    "file": "assets/sfx/field-5.wav",
+    "offset_s": 3.83,
+    "duration_s": 0.12,
+    "volume": 0.3
+  },
+  {
+    "frame": 3,
+    "file": "assets/sfx/field-6.wav",
+    "offset_s": 4.55,
+    "duration_s": 0.12,
+    "volume": 0.3
+  },
+  {
+    "frame": 4,
+    "file": "assets/sfx/settle.wav",
+    "offset_s": 1.78,
+    "duration_s": 1.5,
+    "volume": 0.42
+  },
+  {
+    "frame": 5,
+    "file": "assets/sfx/row-1.wav",
+    "offset_s": 1.45,
+    "duration_s": 0.15,
+    "volume": 0.22
+  },
+  {
+    "frame": 5,
+    "file": "assets/sfx/row-2.wav",
+    "offset_s": 1.55,
+    "duration_s": 0.15,
+    "volume": 0.22
+  },
+  {
+    "frame": 5,
+    "file": "assets/sfx/row-3.wav",
+    "offset_s": 1.65,
+    "duration_s": 0.15,
+    "volume": 0.22
+  },
+  {
+    "frame": 5,
+    "file": "assets/sfx/row-4.wav",
+    "offset_s": 1.75,
+    "duration_s": 0.15,
+    "volume": 0.22
+  },
+  {
+    "frame": 5,
+    "file": "assets/sfx/row-5.wav",
+    "offset_s": 1.85,
+    "duration_s": 0.15,
+    "volume": 0.22
+  },
+  {
+    "frame": 5,
+    "file": "assets/sfx/row-6.wav",
+    "offset_s": 1.95,
+    "duration_s": 0.15,
+    "volume": 0.22
+  },
+  {
+    "frame": 6,
+    "file": "assets/sfx/swell.wav",
+    "offset_s": 0.05,
+    "duration_s": 1.2,
+    "volume": 0.34
+  }
+]

@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>06 — The ladder</title>
+  </head>
+  <body>
+    <template id="frame-06-the-ladder">
+      <style>
+/* Ink Ledger — the film's shared base. Every frame inlines this.
+   The palette, the three faces and the ruled lines are the site's own. */
+
+@font-face {
+  font-family: 'Saira Condensed';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('assets/fonts/saira-condensed-800-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Saira Condensed';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('assets/fonts/saira-condensed-800-latin-ext.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0323, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* The site's own fallback stack names Arial Narrow. It is a system face, so
+   it is declared local rather than shipped. */
+@font-face {
+  font-family: 'Arial Narrow';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: local('Arial Narrow');
+}
+
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/figtree-var-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/figtree-var-latin-ext.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0323, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/jetbrains-mono-400-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/jetbrains-mono-400-latin-ext.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0323, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+#root {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  container-type: size;
+  background-color: #050a30;
+  font-family: 'Figtree', system-ui, sans-serif;
+  color: #f2f5ff;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The site's own ledger texture: hairline rules, not a graph grid. */
+#root .ground {
+  position: absolute;
+  inset: 0;
+  background-color: #050a30;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+  background-size: 96px 96px;
+}
+
+#root .scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+#root .stage {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+/* The one lime element in a frame. A fill, never a stroke, never a glow. */
+#root .volt-fill {
+  background-color: #c8e91c;
+  color: #050a30;
+}
+
+#root .mono {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The film's chrome: the wordmark, the catalogue line. It is quiet, but it
+   still has to clear 3:1 on the ink ground, so it sits at 42%. */
+#root .chrome {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+#root .display {
+  font-family: 'Saira Condensed', 'Arial Narrow', sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+}
+
+
+        /* The ladder's field: the perspective root the 3D surface lives in.
+           It carries the rise; the ladder inside it never moves on its own. */
+        #root .lad__field {
+          position: absolute;
+          left: 96px;
+          top: 306px;
+          width: 1728px;
+          perspective: 1800px;
+          perspective-origin: 50% 50%;
+        }
+
+        /* The volt spill behind the A+ cell. A separate backdrop layer —
+           the A+ rung itself stays a flat lime fill. It lives inside the
+           board's 3D context, pushed back in Z so it sorts behind the
+           rungs rather than over them. Its box is authored in JS from the
+           measured A+ cell. */
+        #root .lad__glow {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 640px;
+          height: 380px;
+          pointer-events: none;
+          opacity: 0;
+          background: radial-gradient(
+            ellipse at 50% 50%,
+            rgba(159, 189, 14, 0.9) 0%,
+            rgba(159, 189, 14, 0.4) 32%,
+            rgba(159, 189, 14, 0.13) 56%,
+            rgba(159, 189, 14, 0) 74%
+          );
+        }
+
+        /* The rail: a spine standing off the ladder's left edge, with
+           three ticks that reach in and land on the left column's rungs
+           (A+, B, D). Its geometry is authored in JS from the rows'
+           measured positions — the rung height is set by the type, not by
+           a number on paper. */
+        #root .lad__rail {
+          position: absolute;
+          left: -28px;
+          top: 0;
+          width: 76px;
+          height: 100%;
+          z-index: 2;
+          overflow: visible;
+          pointer-events: none;
+        }
+
+        #root .lad__rail line {
+          fill: none;
+          stroke: rgba(255, 255, 255, 0.5);
+          stroke-width: 3;
+          stroke-linecap: round;
+        }
+
+        #root .lad {
+          position: relative;
+          z-index: 1;
+          width: 1728px;
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          transform-style: preserve-3d;
+          transform: rotateX(-2deg);
+          transform-origin: 50% 50%;
+        }
+
+        #root .lad__row {
+          display: flex;
+          gap: 4px;
+          width: 1728px;
+          transform-style: preserve-3d;
+        }
+
+        /* Each cell carries its column's tilt, so the board reads as one
+           curved surface. The tilt lives on the cell, not the rung, so the
+           rung's own 3D transform can still resolve flat. */
+        #root .rung__cell {
+          flex: 0 0 calc((100% - 12px) / 4);
+          transform-style: preserve-3d;
+          transform: rotateY(var(--tilt, 0deg));
+          transform-origin: 50% 50%;
+        }
+
+        #root .cell--0 { --tilt: 6deg; }
+        #root .cell--1 { --tilt: 2deg; }
+        #root .cell--2 { --tilt: -2deg; }
+        #root .cell--3 { --tilt: -6deg; }
+
+        #root .rung {
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 20px;
+          min-height: 130px;
+          padding: 22px 30px;
+          background-color: #0d1550;
+          border: 1px solid rgba(255, 255, 255, 0.16);
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+          opacity: 0;
+          transform-origin: 50% 50%;
+        }
+
+        #root .rung__grade {
+          font-family: 'Saira Condensed', 'Arial Narrow', sans-serif;
+          font-weight: 800;
+          font-size: 56px;
+          line-height: 1;
+          color: #f2f5ff;
+          text-transform: uppercase;
+        }
+
+        #root .rung__figures {
+          display: flex;
+          align-items: baseline;
+          gap: 18px;
+          font-family: 'JetBrains Mono', ui-monospace, monospace;
+          font-size: 28px;
+          font-weight: 400;
+          color: #a3abd3;
+          font-variant-numeric: tabular-nums;
+        }
+
+        /* The one volt rung: A+, top-left. A fill, not a stroke. */
+        #root .rung--volt {
+          background-color: #c8e91c;
+          border-color: #c8e91c;
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.38);
+        }
+
+        #root .rung--volt .rung__grade {
+          color: #050a30;
+        }
+
+        #root .rung--volt .rung__figures {
+          color: #050a30;
+        }
+
+        #root .lad__head {
+          position: absolute;
+          left: 96px;
+          top: 92px;
+          font-size: 28px;
+        }
+
+        #root .lad__title {
+          position: absolute;
+          left: 96px;
+          top: 156px;
+          font-family: 'Saira Condensed', 'Arial Narrow', sans-serif;
+          font-weight: 800;
+          font-size: 78px;
+          line-height: 0.9;
+          color: #f2f5ff;
+          text-transform: uppercase;
+          opacity: 0;
+        }
+
+
+      </style>
+
+      <div
+        id="root"
+        class="frame-root"
+        data-composition-id="06-the-ladder"
+        data-start="0"
+        data-width="1920"
+        data-height="1080"
+        data-duration="3.5"
+      >
+        <div class="clip" id="s06-scene" data-start="0" data-duration="3.5" data-track-index="0">
+          <div class="stage" id="s06-stage">
+            <div class="lad__head chrome">MIST GRADE CALCULATOR</div>
+            <div class="lad__title" id="s06-title">What each grade takes</div>
+
+            <div class="lad__field" id="s06-field">
+              <svg
+                class="lad__rail"
+                id="s06-rail"
+                width="76"
+                height="600"
+                viewBox="0 0 76 600"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <line id="s06-spine" x1="16" y1="0" x2="16" y2="600" />
+                <line id="s06-tick-1" x1="16" y1="90" x2="52" y2="90" />
+                <line id="s06-tick-2" x1="16" y1="274" x2="52" y2="274" />
+                <line id="s06-tick-3" x1="16" y1="458" x2="52" y2="458" />
+              </svg>
+
+              <div class="lad" id="s06-lad">
+                <div class="lad__glow" id="s06-glow"></div>
+                <div class="lad__row">
+                  <div class="rung__cell cell--0">
+                    <div class="rung rung--volt">
+                      <div class="rung__grade">A+</div>
+                      <div class="rung__figures"><span>80%</span><span>4.00</span></div>
+                    </div>
+                  </div>
+                  <div class="rung__cell cell--1">
+                    <div class="rung">
+                      <div class="rung__grade">A</div>
+                      <div class="rung__figures"><span>75%</span><span>3.75</span></div>
+                    </div>
+                  </div>
+                  <div class="rung__cell cell--2">
+                    <div class="rung">
+                      <div class="rung__grade">A-</div>
+                      <div class="rung__figures"><span>70%</span><span>3.50</span></div>
+                    </div>
+                  </div>
+                  <div class="rung__cell cell--3">
+                    <div class="rung">
+                      <div class="rung__grade">B+</div>
+                      <div class="rung__figures"><span>65%</span><span>3.25</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="lad__row">
+                  <div class="rung__cell cell--0">
+                    <div class="rung">
+                      <div class="rung__grade">B</div>
+                      <div class="rung__figures"><span>60%</span><span>3.00</span></div>
+                    </div>
+                  </div>
+                  <div class="rung__cell cell--1">
+                    <div class="rung">
+                      <div class="rung__grade">B-</div>
+                      <div class="rung__figures"><span>55%</span><span>2.75</span></div>
+                    </div>
+                  </div>
+                  <div class="rung__cell cell--2">
+                    <div class="rung">
+                      <div class="rung__grade">C+</div>
+                      <div class="rung__figures"><span>50%</span><span>2.50</span></div>
+                    </div>
+                  </div>
+                  <div class="rung__cell cell--3">
+                    <div class="rung">
+                      <div class="rung__grade">C</div>
+                      <div class="rung__figures"><span>45%</span><span>2.25</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="lad__row">
+                  <div class="rung__cell cell--0">
+                    <div class="rung">
+                      <div class="rung__grade">D</div>
+                      <div class="rung__figures"><span>40%</span><span>2.00</span></div>
+                    </div>
+                  </div>
+                  <div class="rung__cell cell--1">
+                    <div class="rung">
+                      <div class="rung__grade">F*</div>
+                      <div class="rung__figures"><span>0%</span><span>0.00</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+      <script>
+        (() => {
+          const field = document.getElementById("s06-field");
+          const title = document.getElementById("s06-title");
+          const glow = document.getElementById("s06-glow");
+          const rungs = Array.from(document.querySelectorAll("#s06-scene .rung"));
+          const figures = rungs.map((rung) => rung.querySelector(".rung__figures"));
+
+          /* The rail's four strokes: the spine, then one tick per grid row.
+             Each tick lands on the left column's rung — A+, B, D. */
+          const rail = document.getElementById("s06-rail");
+          const spine = document.getElementById("s06-spine");
+          const ticks = [
+            document.getElementById("s06-tick-3"),
+            document.getElementById("s06-tick-2"),
+            document.getElementById("s06-tick-1"),
+          ];
+          const strokes = [spine, ...ticks];
+
+          /* The rail's geometry comes from the rows' MEASURED positions.
+             The rung height is set by the type, not by a number on paper,
+             so the spine has to be authored from what the layout actually
+             produced. The rows are laid out by the time the composition
+             mounts, so their offsets are real. */
+          const lad = document.getElementById("s06-lad");
+          /* The rows only — the glow is the board's first child and is not
+             a row. */
+          const rows = Array.from(lad.querySelectorAll(".lad__row"));
+          const ladTop = lad.getBoundingClientRect().top;
+
+          const rowCenters = rows.map((row) => {
+            const r = row.getBoundingClientRect();
+            return r.top - ladTop + r.height / 2;
+          });
+          const ladderHeight = lad.getBoundingClientRect().height;
+
+          rail.setAttribute("viewBox", "0 0 76 " + Math.ceil(ladderHeight));
+          rail.setAttribute("height", String(Math.ceil(ladderHeight)));
+          spine.setAttribute("y1", "0");
+          spine.setAttribute("y2", String(ladderHeight));
+          /* The ticks, bottom-up, so the last one drawn is the one beside
+             A+ — the draw walks the eye to the answer. Each tick reaches
+             in and stops at the rung's own left edge, so it lands on the
+             element without running through its type. */
+          const railX = rail.getBoundingClientRect().left;
+          const tickEnd = lad.getBoundingClientRect().left - railX + 14;
+          ticks.forEach((tick, i) => {
+            const y = rowCenters[rowCenters.length - 1 - i];
+            tick.setAttribute("y1", String(y));
+            tick.setAttribute("y2", String(y));
+            tick.setAttribute("x2", String(tickEnd));
+          });
+
+          /* Measure the real geometry once, at setup. A dasharray of the
+             path's own length makes the whole stroke one dash; a dashoffset
+             of the same length shifts it out of view entirely. */
+          const lengths = strokes.map((p) => p.getTotalLength());
+          strokes.forEach((p, i) => {
+            p.style.strokeDasharray = String(lengths[i]);
+            p.style.strokeDashoffset = String(lengths[i]);
+          });
+
+          /* The glow's box, authored from the MEASURED A+ cell so the spill
+             is centred on the rung it backs, whatever the type does to the
+             row height. It overhangs the cell so the halo spills past it. */
+          const glowEl = document.getElementById("s06-glow");
+          const heroCell = rungs[0].closest(".rung__cell");
+          const heroBox = heroCell.getBoundingClientRect();
+          const heroRect = lad.getBoundingClientRect();
+          const GLOW_OVERHANG = 150;
+          glowEl.style.left = heroBox.left - heroRect.left - GLOW_OVERHANG + "px";
+          glowEl.style.top = heroBox.top - heroRect.top - GLOW_OVERHANG + "px";
+          glowEl.style.width = heroBox.width + GLOW_OVERHANG * 2 + "px";
+          glowEl.style.height = heroBox.height + GLOW_OVERHANG * 2 + "px";
+
+          /* The depth cloud. Every rung's scattered state is index-derived —
+             golden angle for the spread, a stepped depth for the Z. No
+             Math.random anywhere: the cloud is byte-identical every render.
+             The half-step offset keeps the ten points evenly spread. */
+          const GOLDEN = Math.PI * (3 - Math.sqrt(5));
+          const RADIUS_X = 300;
+          const RADIUS_Y = 150;
+          const Z_NEAR = 200;
+          const Z_FAR = -320;
+          const TUMBLE = 46;
+          const N = rungs.length;
+
+          const scatter = rungs.map((el, i) => {
+            const a = (i + 0.5) * GOLDEN;
+            const depthT = i / (N - 1);
+            return {
+              x: Math.cos(a) * RADIUS_X,
+              y: Math.sin(a) * RADIUS_Y,
+              z: Z_NEAR - depthT * (Z_NEAR - Z_FAR),
+              rotationX: Math.sin(a) * TUMBLE,
+              rotationY: Math.cos(a) * TUMBLE,
+            };
+          });
+
+          /* Each rung's column, for the tilt and the counter-phase float.
+             Column 0 is the left column — A+, B, D. */
+          const columnOf = rungs.map((el) => {
+            const cells = Array.from(el.closest(".lad__row").children);
+            return cells.indexOf(el.parentElement);
+          });
+
+          const tl = gsap.timeline({ paused: true });
+
+          /* ── Act one: the ladder rises. ─────────────────────────────── */
+          tl.fromTo(
+            field,
+            { y: 44, opacity: 0 },
+            { y: 0, opacity: 1, duration: 24 / 60, ease: "power2.inOut" },
+            0
+          );
+
+          /* The title lands and holds — blur, and a short rise with it. */
+          tl.fromTo(
+            title,
+            { opacity: 0, filter: "blur(10px)", y: 18 },
+            { opacity: 1, filter: "blur(0px)", y: 0, duration: 24 / 60, ease: "power4.out" },
+            12 / 60
+          );
+
+          /* ── The rail draws itself down the ladder's left edge. ──────── */
+          tl.fromTo(
+            spine,
+            { strokeDashoffset: lengths[0] },
+            { strokeDashoffset: 0, duration: 42 / 60, ease: "power2.out" },
+            15 / 60
+          );
+
+          /* ── Act two: the rungs assemble out of the depth cloud. ────── */
+          /* The rule parks the cloud with gsap.set and then tweens each
+             fragment in. Under a suppressed seek that gsap.set never runs,
+             so the scattered state is the explicit from-value of each
+             fromTo instead — and because the rungs each own their own
+             properties, every one of them can be authored this way. The
+             resolve is flat: z 0, rotations 0. */
+          const ASSEMBLE_AT = 33 / 60;
+          const ASSEMBLE_DUR = 36 / 60;
+          const ASSEMBLE_STAGGER = 3 / 60;
+
+          rungs.forEach((rung, index) => {
+            if (index === 0) return; // A+ arrives last, as the answer.
+            const s = scatter[index];
+            tl.fromTo(
+              rung,
+              {
+                x: s.x,
+                y: s.y,
+                z: s.z,
+                rotationX: s.rotationX,
+                rotationY: s.rotationY,
+                opacity: 0,
+              },
+              {
+                x: 0,
+                y: 0,
+                z: 0,
+                rotationX: 0,
+                rotationY: 0,
+                opacity: 1,
+                duration: ASSEMBLE_DUR,
+                ease: "power3.out",
+              },
+              ASSEMBLE_AT + (index - 1) * ASSEMBLE_STAGGER
+            );
+          });
+
+          /* The figures on each rung wipe in just after their card lands. */
+          rungs.forEach((rung, index) => {
+            if (index === 0) return;
+            const land = ASSEMBLE_AT + (index - 1) * ASSEMBLE_STAGGER + ASSEMBLE_DUR;
+            tl.fromTo(
+              figures[index],
+              { opacity: 0, x: 16 },
+              { opacity: 1, x: 0, duration: 18 / 60, ease: "power2.out" },
+              land + 4 / 60
+            );
+          });
+
+          /* ── Act three: the answer lands. ───────────────────────────── */
+          /* A+ pops in with a back.out overshoot as the ladder settles, so
+             the eye lands on the answer. It is the one bouncy entrance in
+             the film — the hero, once, at the end of the beat. */
+          const HERO_AT = 105 / 60;
+          const HERO_DUR = 36 / 60;
+          const hero = scatter[0];
+
+          tl.fromTo(
+            rungs[0],
+            {
+              x: hero.x,
+              y: hero.y,
+              z: hero.z,
+              rotationX: hero.rotationX,
+              rotationY: hero.rotationY,
+              opacity: 0,
+              scale: 0.55,
+            },
+            {
+              x: 0,
+              y: 0,
+              z: 0,
+              rotationX: 0,
+              rotationY: 0,
+              opacity: 1,
+              scale: 1,
+              duration: HERO_DUR,
+              ease: "back.out(1.5)",
+            },
+            HERO_AT
+          );
+
+          tl.fromTo(
+            figures[0],
+            { opacity: 0, x: 16 },
+            { opacity: 1, x: 0, duration: 18 / 60, ease: "power2.out" },
+            HERO_AT + 10 / 60
+          );
+
+          /* The bloom. A soft volt spill behind the A+ cell, swelling in on
+             the hero's settle and holding. The lime rung itself stays a
+             flat fill — the glow is a separate backdrop layer, and it is
+             the deeper volt, never a second lime element. It sits well
+             behind the board in Z, so the depth sort puts the rungs in
+             front of it. */
+          tl.fromTo(
+            glow,
+            { opacity: 0, scale: 0.82, z: -320 },
+            { opacity: 0.4, scale: 1, z: -320, duration: 36 / 60, ease: "power2.out" },
+            HERO_AT
+          );
+
+          /* ── The rail's ticks land on the left column's rungs. ──────── */
+          /* Drawn bottom-up so the last one to arrive is the one beside
+             A+ — the draw walks the eye to the answer. */
+          ticks.forEach((tick, i) => {
+            const len = lengths[i + 1];
+            tl.fromTo(
+              tick,
+              { strokeDashoffset: len },
+              { strokeDashoffset: 0, duration: 18 / 60, ease: "power2.out" },
+              138 / 60 + i * 9 / 60
+            );
+          });
+
+          /* ── The hold. ──────────────────────────────────────────────── */
+          /* The columns float in counter-phase: 0 and 2 one way, 1 and 3
+             the other. Finite, so the frame ends composed and still.
+             Every rung already owns its y from the assemble, so this
+             later tween must not claim the element at authoring time. */
+          const FLOAT_AT = 144 / 60;
+          const FLOAT_DUR = 31.5 / 60;
+
+          rungs.forEach((rung, index) => {
+            const up = columnOf[index] % 2 === 0 ? -3 : 3;
+            tl.fromTo(
+              rung,
+              { y: 0 },
+              {
+                y: up,
+                duration: FLOAT_DUR,
+                ease: "sine.inOut",
+                yoyo: true,
+                repeat: 1,
+                immediateRender: false,
+              },
+              FLOAT_AT
+            );
+          });
+
+          /* A bounded breathe on the bloom. The rule drove a phase proxy
+             from onUpdate; under a suppressed seek that never runs, so the
+             breathe is a finite yoyo on opacity instead — deterministic,
+             and it rests exactly where it bloomed. */
+          tl.fromTo(
+            glow,
+            { opacity: 0.4 },
+            {
+              opacity: 0.31,
+              duration: FLOAT_DUR,
+              ease: "sine.inOut",
+              yoyo: true,
+              repeat: 1,
+              immediateRender: false,
+            },
+            FLOAT_AT
+          );
+
+          window.__timelines = window.__timelines || {};
+          window.__timelines["06-the-ladder"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>
